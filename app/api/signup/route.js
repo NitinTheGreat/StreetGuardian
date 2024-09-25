@@ -1,12 +1,15 @@
-// app/api/signup/route.js
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { connectToDatabase } from '@/lib/db' // assuming you have a `db.js` for MongoDB connection
-import User from '../../../lib/models/user' // assuming you have a User model in the `models` folder
+import connect from '../../../lib/db' // Using your custom connect function
+import User from '../../../lib/models/user' // Assuming the User model is in the `lib/models/user.js`
 
 export async function POST(request) {
   try {
+    // Parse the request body
     const { username, email, phone, password } = await request.json()
+
+    // Connect to the database
+    await connect()
 
     // Check if the user already exists
     const existingUser = await User.findOne({ email })
@@ -25,10 +28,11 @@ export async function POST(request) {
       password: hashedPassword,
     })
 
+    // Save the new user to the database
     await newUser.save()
 
-    // Optionally, you can send OTP logic here
-    // Send an email with OTP, and return a response to the client
+    // Optionally, send an OTP or other logic
+    // Here you could add logic to send an email with OTP for verification
 
     return NextResponse.json({ message: 'OTP sent to your email' }, { status: 200 })
   } catch (error) {
