@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
@@ -48,93 +48,43 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-  useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const refreshToken = localStorage.getItem('refreshToken');
-
-    console.log('Checking tokens:', { accessToken, refreshToken });
-
-    if (accessToken && refreshToken) {
-      const checkAuth = async () => {
-        try {
-          const response = await fetch('https://ao3-chrome-extension-backend.onrender.com/auth/validate', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Tokens': JSON.stringify({ accessToken, refreshToken }),
-            },
-          });
-
-          if (response.ok) {
-            window.location.href = '/dashboard';
-          } else {
-            console.log('Token validation failed:', response.status);
-            alert('Token validation failed');
-          }
-        } catch (error) {
-          console.error('Error during token validation:', error);
-        }
-      };
-
-      checkAuth();
-    }
-  }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    
     try {
-      const response = await fetch('https://ao3-chrome-extension-backend.onrender.com/auth/login', {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json'
         },
-        body: new URLSearchParams({
-          email,
-          password,
-        }),
+        body: JSON.stringify({ email, password })
       });
-  
-      const data = await response.json();
-      console.log('Response:', response);
-      console.log('Response data:', data);
-  
-      if (response.ok) {
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        
-        if (typeof chrome !== 'undefined' && chrome.runtime) {
-          chrome.runtime.sendMessage("nnmmeljlhmhpnfphcpifdahblfmhlilm", 
-            { action: "storeTokens", accessToken: data.accessToken, refreshToken: data.refreshToken }, 
-            function(response) {
-              if (chrome.runtime.lastError) {
-                console.error('Error sending message:', chrome.runtime.lastError);
-              } else {
-                console.log('Tokens sent to extension:', response);
-              }
-          });
-        }
-        
-        setMessage('Login successful');
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+        // Store the token and display success message
+        const { token } = data;
+        localStorage.setItem('token', token);  // You can use localStorage or sessionStorage as needed
+
+        setMessage('Login successful!');
         setMessageType('success');
-  
-        setTimeout(() => {
-          window.location.href = '/dashboard';
-        }, 1500);
+        
+        // Redirect or perform any additional logic after successful login
       } else {
-        setMessage(data.message || 'Login failed');
+        setMessage(data.message || 'Login failed. Please try again.');
         setMessageType('error');
       }
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('An error occurred. Please try again.');
+      console.error('Login error:', error);
+      setMessage('An error occurred during login.');
       setMessageType('error');
     }
   };
 
   return (
     <motion.div 
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8 mt-10"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -145,13 +95,13 @@ export default function Login() {
           whileHover={{ scale: 1.02 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
-          <Image
+          {/* <Image
             src="/images/login1.png"
             alt="Login illustration"
             layout="fill"
             objectFit="cover"
             priority
-          />
+          /> */}
         </motion.div>
         <motion.div 
           className="w-full md:w-1/2 bg-white p-8 md:p-10"

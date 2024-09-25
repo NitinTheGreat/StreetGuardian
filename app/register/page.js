@@ -131,15 +131,18 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8 mt-8">
       <div className="max-w-6xl w-full flex rounded-xl overflow-hidden shadow-2xl">
         <div className="hidden md:block w-1/2 relative">
           <Image
-            src="/images/signup-illustration.jpg"
+            src="/images/registerPage.jpg" 
             alt="Signup illustration"
             layout="fill"
             objectFit="cover"
+            // width={416}
+            // height={516}
           />
+          {/* <img src="/images/registerPage.jpg" alt="reg" /> */}
         </div>
         <motion.div
           className="w-full md:w-1/2 bg-white p-8 md:p-10"
