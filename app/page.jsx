@@ -84,61 +84,7 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm shadow-sm">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <a href="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              StreetGuardian
-            </a>
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 p-2 rounded-full transition-transform duration-300 ease-in-out transform hover:scale-110"
-              >
-                {isMenuOpen ? (
-                  <X size={24} className="text-white" />
-                ) : (
-                  <Menu size={24} className="text-white" />
-                )}
-              </button>
-            </div>
-            <ul className="hidden md:flex space-x-6">
-              {['About', 'Services', 'Contact', 'Login'].map((item) => (
-                <li key={item}>
-                  <a
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200"
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-white shadow-md"
-          >
-            <ul className="py-2">
-              {['About', 'Services', 'Contact', 'Login'].map((item) => (
-                <li key={item} className="px-4 py-2">
-                  <a
-                    href={`#${item.toLowerCase()}`}
-                    className="block text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </header>
+      
 
       <main>
         <Section>
@@ -271,7 +217,7 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Our Step-by-Step Approach</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center p-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Our Step-by-Step Approach</h2>
             <div className="space-y-8">
               {[
                 { step: 1, title: 'Report', description: 'Users can report individuals in need through our easy-to-use mobile app or website.', icon: Phone },
@@ -305,7 +251,7 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Rewards Program</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 p-2 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Rewards Program</h2>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
               <div className="grid md:grid-cols-2">
                 <div className="p-8">
