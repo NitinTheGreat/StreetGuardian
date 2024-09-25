@@ -11,7 +11,7 @@ const Navbar = () => {
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm shadow-sm">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-teal-400 to-blue-400 bg-clip-text text-transparent">
             StreetGuardian
           </Link>
           {/* Mobile menu toggle */}
@@ -41,7 +41,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link href="/register" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
-                Sign Up
+                SignUp
               </Link>
             </li>
             <li>

@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import connect from '../../../../lib/db' // Use your db connection
+import connect from '../../../lib/db' // Use your db connection
 // import Admin from '../../../../lib/models/admin' // Admin model
-import admin from '../../../lib/models/admin'
+// import admin from '../../../lib/models/admin'
 import admin from '../../../lib/models/admin'
 
 // Secret key for signing JWT tokens
