@@ -80,7 +80,7 @@ const LandingPage = () => {
   const [showConfetti, setShowConfetti] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
-  const y2 = useTransform(scrollY, [0, 300], [0, -50])
+  // const y2 = useTransform(scrollY, [0, 300], [0, -50])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
