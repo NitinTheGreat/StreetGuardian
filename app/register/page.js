@@ -109,7 +109,7 @@ export default function SignUp() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch('https://ao3-chrome-extension-backend.onrender.com/auth/verify-otp', {
+      const response = await fetch('api/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp: otpString })
