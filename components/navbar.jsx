@@ -30,18 +30,18 @@ const Navbar = () => {
           {/* Desktop menu */}
           <ul className="hidden md:flex space-x-8 ml-auto"> {/* Increased space and moved items away from the right */}
             <li>
-              <Link href="/about" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
-                About
+              <Link href="/adminlogin" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                Admin Login
               </Link>
             </li>
             <li>
-              <Link href="/services" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
-                Services
+              <Link href="/admindash" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                Admin Dashboard
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
-                Contact
+              <Link href="/register" className="text-gray-600 hover:bg-gradient-to-r hover:from-purple-600 hover:to-pink-600 hover:bg-clip-text hover:text-transparent transition-all duration-200">
+                Sign Up
               </Link>
             </li>
             <li>
