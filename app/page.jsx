@@ -70,7 +70,7 @@ const springAnimation = {
 }
 
 const StepArrow = () => (
-  <svg className="w-16 h-16 text-pink-400 mx-auto my-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-16 h-16 text-teal-400 mx-auto my-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 )
@@ -83,7 +83,7 @@ const LandingPage = () => {
   // const y2 = useTransform(scrollY, [0, 300], [0, -50])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
       
 
       <main>
@@ -93,7 +93,7 @@ const LandingPage = () => {
               className="absolute inset-0 z-0"
               style={{ y: y1 }}
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 opacity-30"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-blue-400 opacity-30"></div>
               <div 
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
@@ -107,7 +107,7 @@ const LandingPage = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, ease: "easeOut" }}
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent"
               >
                 <TypewriterEffect text="Welcome to StreetGuardian" />
               </motion.h1>
@@ -122,13 +122,13 @@ const LandingPage = () => {
               <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
                 <motion.button
                   whileHover={springAnimation}
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+                  className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300"
                 >
                   Get Started
                 </motion.button>
                 <motion.button
                   whileHover={springAnimation}
-                  className="w-full sm:w-auto border-2 border-purple-600 text-purple-600 font-semibold py-3 px-8 rounded-full hover:bg-purple-600 hover:text-white transition duration-300"
+                  className="w-full sm:w-auto border-2 border-teal-600 text-teal-600 font-semibold py-3 px-8 rounded-full hover:bg-teal-600 hover:text-white transition duration-300"
                 >
                   Learn More
                 </motion.button>
@@ -146,11 +146,11 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Our Mission</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Our Mission</h2>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
               <div className="grid md:grid-cols-2">
                 <div className="p-8">
-                  <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Bridging the Gap</h3>
+                  <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Bridging the Gap</h3>
                   <p className="text-gray-600 mb-4">
                     At StreetGuardian, we believe that everyone deserves a safe place to call home. Our mission is to bridge the gap between those experiencing homelessness and the resources they need to rebuild their lives.
                   </p>
@@ -168,7 +168,7 @@ const LandingPage = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.2 }}
                       >
-                        <CheckCircle className="text-green-500 mr-2 mt-1 flex-shrink-0" size={20} />
+                        <CheckCircle className="text-teal-500 mr-2 mt-1 flex-shrink-0" size={20} />
                         <span className="text-gray-600">{item}</span>
                       </motion.li>
                     ))}
@@ -180,7 +180,7 @@ const LandingPage = () => {
                     alt="Community support illustration"
                     className="w-full h-full object-cover rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-20 rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-blue-600 opacity-20 rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"></div>
                 </div>
               </div>
             </div>
@@ -189,7 +189,7 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">How StreetGuardian Works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">How StreetGuardian Works</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { icon: MapPin, title: 'Locate', description: 'Identify individuals in need of assistance through our user-friendly app' },
@@ -204,10 +204,10 @@ const LandingPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
                 >
-                  <div className="bg-gradient-to-r from-purple-200 to-pink-200 p-3 rounded-full mb-4">
-                    <item.icon size={32} className="text-purple-600" />
+                  <div className="bg-gradient-to-r from-teal-200 to-blue-200 p-3 rounded-full mb-4">
+                    <item.icon size={32} className="text-teal-600" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">{item.title}</h3>
+                  <h3 className="text-xl font-semibold mb-2 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">{item.title}</h3>
                   <p className="text-gray-600">{item.description}</p>
                 </motion.div>
               ))}
@@ -217,7 +217,7 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center p-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Our Step-by-Step Approach</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center p-2 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Our Step-by-Step Approach</h2>
             <div className="space-y-8">
               {[
                 { step: 1, title: 'Report', description: 'Users can report individuals in need through our easy-to-use mobile app or website.', icon: Phone },
@@ -234,11 +234,11 @@ const LandingPage = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.2 }}
                   >
-                    <div className="bg-gradient-to-r from-purple-200 to-pink-200 p-4 rounded-full mr-6 flex-shrink-0">
-                      <item.icon size={32} className="text-purple-600" />
+                    <div className="bg-gradient-to-r from-teal-200 to-blue-200 p-4 rounded-full mr-6 flex-shrink-0">
+                      <item.icon size={32} className="text-teal-600" />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-semibold mb-2 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Step {item.step}: {item.title}</h3>
+                      <h3 className="text-2xl font-semibold mb-2 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Step {item.step}: {item.title}</h3>
                       <p className="text-gray-600">{item.description}</p>
                     </div>
                   </motion.div>
@@ -251,11 +251,11 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 p-2 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Rewards Program</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 p-2 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Rewards Program</h2>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
               <div className="grid md:grid-cols-2">
                 <div className="p-8">
-                  <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Earn Points, Make a Difference</h3>
+                  <h3 className="text-2xl font-semibold mb-4 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Earn Points, Make a Difference</h3>
                   <p className="text-gray-600 mb-4">
                     Our rewards program recognizes and incentivizes your contributions to the community. Earn points for various activities and redeem them for exclusive benefits or donate them to causes you care about.
                   </p>
@@ -268,20 +268,20 @@ const LandingPage = () => {
                     ].map((item, index) => (
                       <motion.li
                         key={index}
-                        className="flex items-center bg-purple-50 p-3 rounded-xl"
+                        className="flex items-center bg-teal-50 p-3 rounded-xl"
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.2 }}
                       >
-                        <item.icon size={24} className="text-purple-600 mr-3" />
+                        <item.icon size={24} className="text-teal-600 mr-3" />
                         <span className="text-gray-700 flex-grow">{item.text}</span>
-                        <span className="text-purple-600 font-semibold">{item.points} pts</span>
+                        <span className="text-teal-600 font-semibold">{item.points} pts</span>
                       </motion.li>
                     ))}
                   </ul>
                   <motion.button
                     whileHover={springAnimation}
-                    className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+                    className="mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
                     onClick={() => setShowConfetti(true)}
                   >
                     Join Rewards Program
@@ -293,7 +293,7 @@ const LandingPage = () => {
                     alt="Rewards program illustration"
                     className="w-full h-full object-cover rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 opacity-20 rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-blue-600 opacity-20 rounded-b-3xl md:rounded-r-3xl md:rounded-bl-none"></div>
                   <div className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-lg">
                     <Star size={32} className="text-yellow-400" />
                   </div>
@@ -305,7 +305,7 @@ const LandingPage = () => {
 
         <Section>
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Join Our Community</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Join Our Community</h2>
             <div className="bg-white p-8 rounded-3xl shadow-xl">
               <p className="text-lg mb-6 text-center text-gray-600">
                 Stay updated with our latest initiatives, success stories, and volunteer opportunities. Together, we can make a lasting difference in the lives of those experiencing homelessness.
@@ -314,11 +314,11 @@ const LandingPage = () => {
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-600"
+                  className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-600"
                 />
                 <motion.button
                   whileHover={springAnimation}
-                  className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+                  className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
                 >
                   Subscribe
                 </motion.button>
@@ -328,19 +328,19 @@ const LandingPage = () => {
         </Section>
       </main>
 
-      <footer className="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-12 rounded-t-3xl mt-16">
+      <footer className="bg-gradient-to-r from-teal-600 to-blue-600 text-white py-12 rounded-t-3xl mt-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             <div>
               <h3 className="text-lg font-semibold mb-4">StreetGuardian</h3>
-              <p className="text-purple-100">Empowering communities to support those in need</p>
+              <p className="text-teal-100">Empowering communities to support those in need</p>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
                 {['About', 'Services', 'Contact', 'Privacy Policy'].map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-purple-100 hover:text-white transition-colors duration-200">
+                    <a href="#" className="text-teal-100 hover:text-white transition-colors duration-200">
                       {item}
                     </a>
                   </li>
@@ -349,7 +349,7 @@ const LandingPage = () => {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-              <address className="text-purple-100 not-italic">
+              <address className="text-teal-100 not-italic">
                 <p>123 Compassion Street</p>
                 <p>Kindness City, KC 12345</p>
                 <p>contact@streetguardian.org</p>
@@ -359,14 +359,14 @@ const LandingPage = () => {
               <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
               <div className="flex space-x-4">
                 {['Facebook', 'Twitter', 'Instagram', 'LinkedIn'].map((item) => (
-                  <a key={item} href="#" className="text-purple-100 hover:text-white transition-colors duration-200">
+                  <a key={item} href="#" className="text-teal-100 hover:text-white transition-colors duration-200">
                     {item}
                   </a>
                 ))}
               </div>
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-purple-500 text-center text-purple-100">
+          <div className="mt-8 pt-8 border-t border-teal-500 text-center text-teal-100">
             <p>&copy; {new Date().getFullYear()} StreetGuardian. All rights reserved.</p>
           </div>
         </div>
