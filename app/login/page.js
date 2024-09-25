@@ -84,7 +84,7 @@ export default function Login() {
 
   return (
     <motion.div 
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8 mt-10"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-200 to-blue-500 py-12 px-4 sm:px-6 lg:px-8 mt-10"
       initial="hidden"
       animate="visible"
       variants={containerVariants}
@@ -95,26 +95,21 @@ export default function Login() {
           whileHover={{ scale: 1.02 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
-          {/* <Image
-            src="/images/login1.png"
-            alt="Login illustration"
-            layout="fill"
-            objectFit="cover"
-            priority
-          /> */}
+          {/* Image placeholder */}
+          <div className="w-full h-full bg-gradient-to-br from-teal-300 to-blue-400"></div>
         </motion.div>
         <motion.div 
           className="w-full md:w-1/2 bg-white p-8 md:p-10"
           variants={childVariants}
         >
           <motion.div variants={childVariants}>
-            <h1 className="text-3xl font-bold text-purple-600 mb-2">Welcome back!</h1>
+            <h1 className="text-3xl font-bold text-blue-600 mb-2">Welcome back</h1>
             <p className="text-gray-600 mb-6">
               Log in to access your personalized AO3 tools. Continue your fanfiction journey right where you left off.
             </p>
           </motion.div>
 
-          <motion.h2 variants={childVariants} className="text-2xl font-semibold text-purple-600 mb-4">LOGIN</motion.h2>
+          <motion.h2 variants={childVariants} className="text-2xl font-semibold text-blue-600 mb-4">LOGIN</motion.h2>
 
           {message && (
             <motion.div 
@@ -137,7 +132,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </motion.div>
@@ -152,7 +147,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   type="button"
@@ -165,24 +160,24 @@ export default function Login() {
             </motion.div>
             <div className="flex items-center justify-between mb-6">
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox h-4 w-4 text-purple-600" />
+                <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600" />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-purple-600 hover:text-purple-500">Forgot Password?</a>
+              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">Forgot Password?</a>
             </div>
             <motion.button
               type="submit"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Log In
             </motion.button>
           </motion.form>
 
           <motion.p variants={childVariants} className="mt-6 text-center text-sm text-gray-600">
-            Don&apos;t have an account? <a href="/register" className="font-medium text-purple-600 hover:text-purple-500">Sign up</a>
+            Don&apos;t have an account? <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">Sign up</a>
           </motion.p>
         </motion.div>
       </div>

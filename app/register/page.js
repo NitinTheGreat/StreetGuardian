@@ -131,18 +131,10 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-pink-50 py-12 px-4 sm:px-6 lg:px-8 mt-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-200 to-blue-500 py-12 px-4 sm:px-6 lg:px-8 mt-8">
       <div className="max-w-6xl w-full flex rounded-xl overflow-hidden shadow-2xl">
         <div className="hidden md:block w-1/2 relative">
-          <Image
-            src="/images/registerPage.jpg" 
-            alt="Signup illustration"
-            layout="fill"
-            objectFit="cover"
-            // width={416}
-            // height={516}
-          />
-          {/* <img src="/images/registerPage.jpg" alt="reg" /> */}
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-300 to-blue-400"></div>
         </div>
         <motion.div
           className="w-full md:w-1/2 bg-white p-8 md:p-10"
@@ -151,7 +143,7 @@ export default function SignUp() {
           variants={containerVariants}
         >
           <motion.div variants={childVariants}>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign up</h2>
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-600">Sign up</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Join now to unlock exclusive tools and keep your AO3 fanfiction journey organized!
             </p>
@@ -171,7 +163,7 @@ export default function SignUp() {
                       name="username"
                       type="text"
                       required
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="Username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
@@ -189,7 +181,7 @@ export default function SignUp() {
                       type="email"
                       autoComplete="email"
                       required
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="Email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -207,7 +199,7 @@ export default function SignUp() {
                       type="tel"
                       autoComplete="tel"
                       required
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="Phone number"
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
@@ -225,7 +217,7 @@ export default function SignUp() {
                       type={showPassword ? 'text' : 'password'}
                       autoComplete="new-password"
                       required
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -249,7 +241,7 @@ export default function SignUp() {
                       name="confirm-password"
                       type={showConfirmPassword ? 'text' : 'password'}
                       required
-                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      className="appearance-none rounded-md relative block w-full px-3 py-2 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                       placeholder="Confirm Password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
@@ -271,7 +263,7 @@ export default function SignUp() {
                   whileHover="hover"
                   whileTap="tap"
                   type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={!isFormValid || isSubmitting}
                 >
                   {isSubmitting ? 'Signing Up...' : 'Sign Up'}
@@ -288,7 +280,7 @@ export default function SignUp() {
                     id={`otp-${index}`}
                     type="text"
                     maxLength={1}
-                    className="w-10 h-10 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    className="w-10 h-10 text-center text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={digit}
                     onChange={(e) => handleOtpChange(index, e.target.value)}
                   />
@@ -300,7 +292,7 @@ export default function SignUp() {
                   whileHover="hover"
                   whileTap="tap"
                   type="submit"
-                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={otp.join('').length !== 6 || isSubmitting}
                 >
                   {isSubmitting ? 'Verifying OTP...' : 'Verify OTP'}
@@ -311,7 +303,7 @@ export default function SignUp() {
           <motion.div className="text-center mt-4" variants={childVariants}>
             <p className="text-sm text-gray-600">
               Already have an account?{' '}
-              <a href="/login" className="font-medium text-purple-600 hover:text-purple-500">
+              <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
                 Login
               </a>
             </p>
