@@ -1,5 +1,6 @@
+'use client';
 import React, { useState, useEffect } from 'react';
-import "../css/Login.css";
+import "../../css/Login.css";
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -243,7 +244,7 @@ return (
           </form>
 
           <p style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px', color: '#4b5563' }}>
-            Don't have an account? <a href="/signup" style={{ color: '#1e3a8a', textDecoration: 'none' }}>Signup</a>
+            Don't have an account? <a href="/register" style={{ color: '#1e3a8a', textDecoration: 'none' }}>Signup</a>
           </p>
         </div>
       </div>
