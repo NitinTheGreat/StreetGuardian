@@ -232,7 +232,7 @@ export default function Login() {
           </motion.form>
 
           <motion.p variants={childVariants} className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account? <a href="/register" className="font-medium text-purple-600 hover:text-purple-500">Sign up</a>
+            Don&apos;t have an account? <a href="/register" className="font-medium text-purple-600 hover:text-purple-500">Sign up</a>
           </motion.p>
         </motion.div>
       </div>

@@ -1,9 +1,9 @@
 'use client'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Home, Briefcase, Book, Coffee, Menu, X, Clock, Gift, Star, CheckCircle, ArrowRight } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Menu, X, Clock, Gift, Star, CheckCircle } from 'lucide-react'
 
 const TypewriterEffect = ({ text }) => {
   const [displayText, setDisplayText] = useState('Wel')
