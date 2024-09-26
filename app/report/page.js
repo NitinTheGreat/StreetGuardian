@@ -62,9 +62,43 @@ export function ReportPageJsx() {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    // Handle form submission here
-  }
+    e.preventDefault();
+  
+    // Get JWT token from localStorage or auth state
+    const token = localStorage.getItem('token'); // Adjust this based on how you're storing the JWT
+  
+    if (!token) {
+      alert("Please log in to submit the report.");
+      return;
+    }
+  
+    try {
+      const response = await fetch('/api/report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          token,
+          location,
+          images: images.map(img => img.preview), // Send image URLs (update this if you upload images to cloud storage)
+          comments,
+          landmark,
+        }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      alert('Failed to submit the report.');
+    }
+  };
+  
 
   const handleMapClick = () => {
     if ("geolocation" in navigator) {
@@ -87,14 +121,14 @@ export function ReportPageJsx() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#01579b] via-[#0277bd] to-[#e0f2f1] p-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#e0f2f1] via-[#01579b] to-[#e0f2f1] p-8 mt-14">
       <motion.div
         className="max-w-7xl mx-auto bg-white bg-opacity-90 rounded-lg shadow-2xl p-8 flex flex-col md:flex-row gap-8"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="w-full md:w-1/2 h-[400px] relative">
+        <motion.div variants={itemVariants} className="w-full md:w-1/2 h-[800px] relative">
           <div 
             className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center cursor-pointer"
             onClick={handleMapClick}
@@ -253,3 +287,5 @@ export function ReportPageJsx() {
     </div>
   )
 }
+
+export default ReportPageJsx
