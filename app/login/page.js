@@ -63,14 +63,12 @@ export default function Login() {
       const data = await res.json();
 
       if (res.status === 200) {
-        // Store the token and display success message
         const { token } = data;
-        localStorage.setItem('token', token);  // You can use localStorage or sessionStorage as needed
+        localStorage.setItem('token', token);  
 
         setMessage('Login successful!');
         setMessageType('success');
         
-        // Redirect or perform any additional logic after successful login
       } else {
         setMessage(data.message || 'Login failed. Please try again.');
         setMessageType('error');
@@ -111,7 +109,7 @@ export default function Login() {
           <motion.div variants={childVariants}>
             <h1 className="text-3xl font-bold text-blue-600 mb-2">Welcome back</h1>
             <p className="text-gray-600 mb-6">
-              Log in to access your personalized AO3 tools. Continue your fanfiction journey right where you left off.
+              Log in to access StreetGuardian's services. Let's get back to helping the one's in need.
             </p>
           </motion.div>
 
