@@ -96,6 +96,12 @@ export default function Login() {
           transition={{ type: 'spring', stiffness: 300 }}
         >
           {/* Image placeholder */}
+          <Image
+        src="/images/loginuser.png" 
+        alt="Description of the image"
+        layout='fill'
+        priority={true} 
+      />
           <div className="w-full h-full bg-gradient-to-br from-teal-300 to-blue-400"></div>
         </motion.div>
         <motion.div 

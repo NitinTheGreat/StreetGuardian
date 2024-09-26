@@ -135,17 +135,25 @@ export default function SignUp() {
       <div className="max-w-6xl w-full flex rounded-xl overflow-hidden shadow-2xl">
         <div className="hidden md:block w-1/2 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-teal-300 to-blue-400"></div>
+          <Image
+        src="/images/loginuser.png" 
+        alt="Description of the image"
+        layout='fill'
+        priority={true} 
+      />
         </div>
+        
         <motion.div
           className="w-full md:w-1/2 bg-white p-8 md:p-10"
           initial="hidden"
           animate="visible"
           variants={containerVariants}
         >
+           
           <motion.div variants={childVariants}>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-600">Sign up</h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Join now to unlock exclusive tools and keep your AO3 fanfiction journey organized!
+              Join now to start helping the unsheltered!!!
             </p>
           </motion.div>
 
