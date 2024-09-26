@@ -41,7 +41,7 @@ export function SupportPageComponent() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-teal-200 to-blue-500 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-teal-200 to-blue-500 p-6 mt-12">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-white mb-8">StreetGuardian Support</h1>
 
