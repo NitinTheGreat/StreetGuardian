@@ -88,7 +88,7 @@ const LandingPage = () => {
 
       <main>
         <Section>
-          <div className="container mx-auto px-4 pt-20 text-center relative overflow-hidden min-h-screen flex items-center justify-center">
+          <div className="container mx-auto px-4  text-center   overflow-hidden min-h-screen flex items-center justify-center">
             <motion.div 
               className="absolute inset-0 z-0"
               style={{ y: y1 }}
@@ -102,7 +102,7 @@ const LandingPage = () => {
                 }}
               ></div>
             </motion.div>
-            <div className="relative z-10 bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl max-w-3xl">
+            <div className="relative z-10 bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-3xl">
               <motion.h1
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}

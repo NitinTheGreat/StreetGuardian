@@ -30,7 +30,6 @@ export async function POST(request) {
     // Save the report
     await newReport.save();
 
-    // Find the user and update their reward points
     const user = await User.findById(userId);
     if (user) {
       user.rewardPoints += 100; // Add 100 points
