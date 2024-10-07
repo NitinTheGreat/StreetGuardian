@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import jwt from 'jsonwebtoken'
 import connect from '../../../../lib/db'
-import Admin from '../../../../lib/models/admin' 
+import Admin from '../../../lib/models/admin' 
+import Admin from '../../../lib/models/admin'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_admin_secret_key';
 
