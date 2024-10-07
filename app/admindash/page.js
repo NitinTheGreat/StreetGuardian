@@ -1,15 +1,15 @@
-"use client"
+'use client'
 
 import React, { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { Check, MapPinIcon } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Button } from "@/components/ui/button"
+import { motion, AnimatePresence } from 'framer-motion'
+import { Check, MapPin, X, ChevronLeft, ChevronRight } from 'lucide-react'
+import dynamic from 'next/dynamic'
 
 const AdminDashboard = () => {
   const [map, setMap] = useState(null)
-  const [userLocation, setUserLocation] = useState(null)
+  const [reportedCases, setReportedCases] = useState([])
+  const [selectedCase, setSelectedCase] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const emergencyData = [
     { id: 1, text: 'Emergency situation reported at Main St.' },
@@ -19,208 +19,44 @@ const AdminDashboard = () => {
     { id: 5, text: 'Traffic accident reported on Highway 101' },
   ]
 
-  const notificationData = [
-    { id: 1, text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
-    { id: 2, text: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' },
-    { id: 3, text: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.' },
-    { id: 4, text: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.' },
-    { id: 5, text: 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia.' },
-  ]
+  // Dynamically import Leaflet with no SSR
+  const MapComponent = dynamic(
+    () => import('../../components/MapComponent'),
+    { ssr: false }
+  )
 
   useEffect(() => {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.href = 'https://unpkg.com/leaflet/dist/leaflet.css'
-    document.head.appendChild(link)
-
-    const script = document.createElement('script')
-    script.src = 'https://unpkg.com/leaflet/dist/leaflet.js'
-    script.onload = initializeMap
-    document.body.appendChild(script)
-
-    return () => {
-      document.head.removeChild(link)
-      document.body.removeChild(script)
-    }
+    fetchReportedCases()
   }, [])
 
-  const initializeMap = () => {
-    const mapInstance = L.map('map').setView([20.5937, 78.9629], 5)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(mapInstance)
-    setMap(mapInstance)
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          setUserLocation({ latitude, longitude })
-          mapInstance.setView([latitude, longitude], 15)
-          addMarker(mapInstance, latitude, longitude)
-          submitLocation(latitude, longitude)
-        },
-        (error) => {
-          console.error("Error getting location:", error)
-        }
-      )
+  const fetchReportedCases = async () => {
+    try {
+      const response = await fetch('/api/reports')
+      const data = await response.json()
+      setReportedCases(data)
+    } catch (error) {
+      console.error('Error fetching reported cases:', error)
     }
   }
 
-  const addMarker = (mapInstance, lat, lon) => {
-    mapInstance.eachLayer(layer => {
-      if (layer instanceof L.Marker) {
-        mapInstance.removeLayer(layer)
-      }
-    })
-
-    L.marker([lat, lon]).addTo(mapInstance)
-      .bindPopup('You\'re here!')
-      .openPopup()
+  const openModal = (caseData) => {
+    setSelectedCase(caseData)
+    setShowModal(true)
   }
 
-  const submitLocation = (latitude, longitude) => {
-    fetch('/submit-location', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ latitude, longitude })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
-      return response.json()
-    })
-    .then(data => {
-      if (data.success) {
-        console.log('Location saved successfully!')
-        checkNearbyLocations(latitude, longitude)
-      } else {
-        console.error('Failed to save location')
-      }
-    })
-    .catch(error => {
-      console.error('Error saving location:', error)
-    })
-  }
-
-  const checkNearbyLocations = (lat, lon) => {
-    fetch('/get-locations')
-      .then(response => response.json())
-      .then(locations => {
-        let count = 0
-        locations.forEach(loc => {
-          const distance = calculateDistance(lat, lon, loc.latitude, loc.longitude)
-          if (distance <= 10) {
-            count++
-          }
-        })
-
-        if (count >= 10) {
-          drawCircle(lat, lon)
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching locations:', error)
-      })
-  }
-
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371
-    const dLat = degreesToRadians(lat2 - lat1)
-    const dLon = degreesToRadians(lon2 - lon1)
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    return R * c
-  }
-
-  const degreesToRadians = (degrees) => {
-    return degrees * (Math.PI / 180)
-  }
-
-  const drawCircle = (lat, lon) => {
-    if (map) {
-      L.circle([lat, lon], {
-        color: '#3b82f6',
-        fillColor: '#60a5fa',
-        fillOpacity: 0.2,
-        radius: 1500
-      }).addTo(map)
-    }
+  const closeModal = () => {
+    setSelectedCase(null)
+    setShowModal(false)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500">
-      <main className="pt-20 px-4 md:px-8 flex flex-col gap-8">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500 p-8">
+      <main className="pt-20 flex flex-col gap-8">
         <div className="flex flex-col md:flex-row gap-8">
-          <Card className="w-full md:w-1/3 shadow-lg bg-white">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-blue-600">
-                SOS : Emergencies
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px] w-full rounded-md border p-4">
-                {emergencyData.map((item) => (
-                  <motion.div
-                    key={item.id}
-                    className="mb-4 p-4 bg-blue-50 rounded-lg shadow-md"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: item.id * 0.1 }}
-                  >
-                    <p className="text-blue-800 mb-4">{item.text}</p>
-                    <div className="flex justify-end space-x-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="hover:bg-green-500 hover:text-white transition-colors duration-200 border-blue-500 text-blue-500"
-                      >
-                        <Check className="w-4 h-4 mr-2" />
-                        Approve
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="hover:bg-red-500 hover:text-white transition-colors duration-200 border-blue-500 text-blue-500"
-                      >
-                        <MapPinIcon className="w-4 h-4 mr-2" />
-                        Locate
-                      </Button>
-                    </div>
-                  </motion.div>
-                ))}
-              </ScrollArea>
-            </CardContent>
-          </Card>
-
-          <Card className="w-full md:w-2/3 shadow-lg bg-white">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-blue-600">
-                Map Overview
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div id="map" className="h-[400px] w-full rounded-md"></div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card className="w-full shadow-lg bg-white">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold text-blue-600">
-              Notifications
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[400px] w-full rounded-md border p-4">
-              {notificationData.map((item) => (
+          <div className="w-full md:w-1/3 bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-blue-600 mb-4">SOS : Emergencies</h2>
+            <div className="h-[400px] overflow-y-auto">
+              {emergencyData.map((item) => (
                 <motion.div
                   key={item.id}
                   className="mb-4 p-4 bg-blue-50 rounded-lg shadow-md"
@@ -230,29 +66,134 @@ const AdminDashboard = () => {
                 >
                   <p className="text-blue-800 mb-4">{item.text}</p>
                   <div className="flex justify-end space-x-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="hover:bg-green-500 hover:text-white transition-colors duration-200 border-blue-500 text-blue-500"
-                    >
-                      <Check className="w-4 h-4 mr-2" />
+                    <button className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-200">
+                      <Check className="w-4 h-4 mr-2 inline" />
                       Approve
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      className="hover:bg-red-500 hover:text-white transition-colors duration-200 border-blue-500 text-blue-500"
-                    >
-                      <MapPinIcon className="w-4 h-4 mr-2" />
+                    </button>
+                    <button className="px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors duration-200">
+                      <MapPin className="w-4 h-4 mr-2 inline" />
                       Locate
-                    </Button>
+                    </button>
                   </div>
                 </motion.div>
               ))}
-            </ScrollArea>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+
+          <div className="w-full md:w-2/3 bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl font-bold text-blue-600 mb-4">Map Overview</h2>
+            <div className="h-[400px] w-full rounded-md">
+              <MapComponent />
+            </div>
+          </div>
+        </div>
+
+        <div className="w-full bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-2xl font-bold text-blue-600 mb-4">Reported Cases</h2>
+          <div className="h-[400px] overflow-y-auto">
+            {reportedCases.map((item) => (
+              <motion.div
+                key={item._id}
+                className="mb-4 p-4 bg-blue-50 rounded-lg shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <p className="text-blue-800 mb-4">{item.landmark}</p>
+                <div className="flex justify-end space-x-2">
+                  <button 
+                    className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
+                    onClick={() => openModal(item)}
+                  >
+                    <Check className="w-4 h-4 mr-2 inline" />
+                    View Details
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </main>
+
+      <AnimatePresence>
+        {showModal && selectedCase && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              className="bg-white p-8 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-blue-600">Case Details</h2>
+                <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+              <div className="flex flex-col md:flex-row gap-8">
+                <div className="w-full md:w-1/2">
+                  <p><strong>Reported by:</strong> {selectedCase.userId}</p>
+                  <p><strong>Landmark:</strong> {selectedCase.landmark}</p>
+                  <p><strong>Comments:</strong> {selectedCase.comments}</p>
+                  <div className="mt-4">
+                    <h3 className="text-lg font-semibold mb-2">Images:</h3>
+                    <ImageCarousel images={selectedCase.images} />
+                  </div>
+                </div>
+                <div className="w-full md:w-1/2 h-[300px]">
+                  <MapComponent location={selectedCase.location} />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+const ImageCarousel = ({ images }) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  const nextImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
+  }
+
+  const prevImage = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length)
+  }
+
+  return (
+    <div className="relative w-full h-64">
+      <AnimatePresence initial={false}>
+        <motion.img
+          key={currentIndex}
+          src={images[currentIndex]}
+          alt={`Image ${currentIndex + 1}`}
+          className="w-full h-full object-cover rounded-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        />
+      </AnimatePresence>
+      <button
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md"
+        onClick={prevImage}
+      >
+        <ChevronLeft className="w-6 h-6 text-blue-600" />
+      </button>
+      <button
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-md"
+        onClick={nextImage}
+      >
+        <ChevronRight className="w-6 h-6 text-blue-600" />
+      </button>
     </div>
   )
 }
