@@ -31,13 +31,17 @@ const AdminDashboard = () => {
 
   const fetchReportedCases = async () => {
     try {
-      const response = await fetch('/api/reports')
-      const data = await response.json()
-      setReportedCases(data)
+      // Fetch the locations from the CSV-based API
+      const response = await fetch('/api/reports');
+      const data = await response.json();
+
+      // Set the reported cases (locations) in state
+      setReportedCases(data);
     } catch (error) {
-      console.error('Error fetching reported cases:', error)
+      console.error('Error fetching reported cases:', error);
     }
-  }
+  };
+
 
   const openModal = (caseData) => {
     setSelectedCase(caseData)
@@ -83,8 +87,9 @@ const AdminDashboard = () => {
           <div className="w-full md:w-2/3 bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-blue-600 mb-4">Map Overview</h2>
             <div className="h-[400px] w-full rounded-md">
-              <MapComponent />
+              <MapComponent locations={reportedCases} />
             </div>
+
           </div>
         </div>
 
@@ -101,7 +106,7 @@ const AdminDashboard = () => {
               >
                 <p className="text-blue-800 mb-4">{item.landmark}</p>
                 <div className="flex justify-end space-x-2">
-                  <button 
+                  <button
                     className="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors duration-200"
                     onClick={() => openModal(item)}
                   >
