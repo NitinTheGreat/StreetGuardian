@@ -19,6 +19,7 @@ export async function POST(request) {
     try {
       decoded = jwt.verify(token, JWT_SECRET)
     } catch (error) {
+      console.error('JWT verification error:', error)
       return NextResponse.json({ message: 'Invalid token' }, { status: 401 })
     }
 

@@ -6,7 +6,7 @@ import { Check, MapPin, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import dynamic from 'next/dynamic'
 
 const AdminDashboard = () => {
-  const [map, setMap] = useState(null)
+  // const [map, setMap] = useState(null)
   const [reportedCases, setReportedCases] = useState([])
   const [selectedCase, setSelectedCase] = useState(null)
   const [showModal, setShowModal] = useState(false)

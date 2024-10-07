@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Menu, X, Clock, Gift, Star, CheckCircle } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase,  Clock, Gift, Star, CheckCircle } from 'lucide-react'
 
 const TypewriterEffect = ({ text }) => {
   const [displayText, setDisplayText] = useState('Wel')
@@ -76,7 +76,7 @@ const StepArrow = () => (
 )
 
 const LandingPage = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  // const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])

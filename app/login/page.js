@@ -109,7 +109,7 @@ export default function Login() {
           <motion.div variants={childVariants}>
             <h1 className="text-3xl font-bold text-blue-600 mb-2">Welcome back</h1>
             <p className="text-gray-600 mb-6">
-              Log in to access StreetGuardian's services. Let's get back to helping the one's in need.
+              Log in to access StreetGuardian&apos;s services. Let&apos;s get back to helping the one&apos;s in need.
             </p>
           </motion.div>
 

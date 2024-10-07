@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import { FiEye, FiEyeOff, FiUser, FiMail, FiLock, FiPhone } from 'react-icons/fi'
 import { motion } from 'framer-motion'
@@ -84,6 +84,7 @@ export default function SignUp() {
         setMessage(data.message || 'Registration failed. Please try again.')
       }
     } catch (error) {
+      console.error('An error occurred:', error)
       setMessage('An error occurred. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -124,6 +125,7 @@ export default function SignUp() {
         setMessage(data.message || 'OTP verification failed. Please try again.')
       }
     } catch (error) {
+      console.error('An error occurred:', error)
       setMessage('An error occurred. Please try again.')
     } finally {
       setIsSubmitting(false)

@@ -67,11 +67,14 @@ function createHotspots(locations) {
 function MapEvents({ setLocation }) {
   useMapEvents({
     click(e) {
-      setLocation && setLocation(e.latlng);
+      if (setLocation) {
+        setLocation(e.latlng);
+      }
     },
   });
   return null;
 }
+
 
 // ChangeView component to center the map on a specific location
 function ChangeView({ center, zoom }) {
