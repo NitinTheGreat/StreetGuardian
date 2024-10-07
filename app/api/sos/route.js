@@ -4,7 +4,7 @@ import SOS from '../../../lib/models/sos'
 
 export async function POST(request) {
   try {
-    const { userLocation, nearestLocation, serviceType } = await request.json()
+    const { userLocation, nearestLocation, serviceType, description } = await request.json()
 
     await connect()
 
@@ -12,6 +12,7 @@ export async function POST(request) {
       userLocation,
       nearestLocation,
       serviceType,
+      description,
       timestamp: new Date(),
     })
 

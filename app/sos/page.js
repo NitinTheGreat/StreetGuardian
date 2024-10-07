@@ -4,16 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { FiMapPin, FiPhone, FiAlertCircle } from 'react-icons/fi';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 
-// Dynamically import Leaflet components with no SSR
-const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), { ssr: false });
-const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false });
-const Marker = dynamic(() => import('react-leaflet').then((mod) => mod.Marker), { ssr: false });
-const Popup = dynamic(() => import('react-leaflet').then((mod) => mod.Popup), { ssr: false });
-const useMap = dynamic(() => import('react-leaflet').then((mod) => mod.useMap), { ssr: false });
+// Dynamically import the Map component with no SSR
+const Map = dynamic(() => import('./Map'), { ssr: false });
 
 // Animation variants
 const containerVariants = {
@@ -66,49 +59,12 @@ const useGeoLocation = () => {
   return location;
 };
 
-// Custom icon for markers
-const createIcon = (iconUrl) => {
-  return new L.Icon({
-    iconUrl,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-  });
-};
-
-// Component to add routing
-const RoutingMachine = ({ userLocation, nearestLocation }) => {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map || !userLocation || !nearestLocation) return;
-
-    const routingControl = L.Routing.control({
-      waypoints: [
-        L.latLng(userLocation.lat, userLocation.lng),
-        L.latLng(nearestLocation.lat, nearestLocation.lng)
-      ],
-      lineOptions: {
-        styles: [{ color: 'red', opacity: 0.6, weight: 4 }]
-      },
-      addWaypoints: false,
-      draggableWaypoints: false,
-      fitSelectedRoutes: true,
-      showAlternatives: false
-    }).addTo(map);
-
-    return () => map.removeControl(routingControl);
-  }, [map, userLocation, nearestLocation]);
-
-  return null;
-};
-
-export default function SOSPage() {
+export default function Component() {
   const [selectedService, setSelectedService] = useState('hospital');
   const [nearestLocation, setNearestLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [description, setDescription] = useState('');
   const userLocation = useGeoLocation();
 
   useEffect(() => {
@@ -152,11 +108,13 @@ export default function SOSPage() {
             userLocation,
             nearestLocation,
             serviceType: selectedService,
+            description,
           }),
         });
 
         if (response.ok) {
           alert('SOS request submitted successfully!');
+          setDescription('');
         } else {
           throw new Error('Failed to submit SOS request');
         }
@@ -228,52 +186,39 @@ export default function SOSPage() {
                 </li>
               </ul>
             </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-semibold text-blue-600">Describe Your Emergency</h2>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500"
+                rows="4"
+                placeholder="Please briefly describe your emergency..."
+              ></textarea>
+            </div>
             <motion.button
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
               className="w-full py-2 px-4 bg-red-600 text-white rounded-md shadow-md flex items-center justify-center"
               onClick={handleSOSSubmit}
-              disabled={!nearestLocation || isLoading}
+              disabled={!nearestLocation || isLoading || !description.trim()}
             >
               <FiAlertCircle className="mr-2" />
               Send SOS Alert
             </motion.button>
           </motion.div>
           <motion.div variants={childVariants} className="h-[600px] relative">
-            {typeof window !== 'undefined' && userLocation && (
-              <MapContainer center={[userLocation.lat, userLocation.lng]} zoom={13} style={{ height: '100%', width: '100%' }}>
-                <TileLayer
-                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker 
-                  position={[userLocation.lat, userLocation.lng]} 
-                  icon={createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png')}
-                >
-                  <Popup>Your Location</Popup>
-                </Marker>
-                {nearestLocation && (
-                  <Marker 
-                    position={[nearestLocation.lat, nearestLocation.lng]}
-                    icon={createIcon('https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png')}
-                  >
-                    <Popup>{nearestLocation.name}</Popup>
-                  </Marker>
-                )}
-                {userLocation && nearestLocation && (
-                  <RoutingMachine userLocation={userLocation} nearestLocation={nearestLocation} />
-                )}
-              </MapContainer>
-            )}
-            {(!userLocation || isLoading) && (
+            {userLocation ? (
+              <Map userLocation={userLocation} nearestLocation={nearestLocation} />
+            ) : (
               <div className="h-full flex items-center justify-center bg-gray-100 rounded-lg">
                 <FiMapPin className="text-4xl text-gray-400 animate-bounce" />
                 <p className="ml-2 text-gray-600">Loading map...</p>
               </div>
             )}
             {error && (
-              <div className="h-full flex items-center justify-center bg-red-100 rounded-lg">
+              <div className="absolute inset-0 flex items-center justify-center bg-red-100 bg-opacity-75 rounded-lg">
                 <p className="text-red-600">{error}</p>
               </div>
             )}
