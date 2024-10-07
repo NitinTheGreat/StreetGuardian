@@ -29,7 +29,7 @@ const itemVariants = {
   }
 }
 
-export function ReportPageJsx() {
+function ReportPage() {
   const [location, setLocation] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [images, setImages] = useState([])
@@ -287,5 +287,4 @@ export function ReportPageJsx() {
     </div>
   )
 }
-
-export default ReportPageJsx
+export default ReportPage
