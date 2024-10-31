@@ -24,7 +24,7 @@ const RewardsProgram = () => {
     <div className="min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Points Display */}
-        <div className="absolute top-4 right-4 bg-white rounded-full p-4 shadow-lg">
+        <div className="absolute top-4 right-4 bg-white rounded-full p-4 shadow-lg mt-12">
           <p className="text-blue-600 font-bold">Your Points</p>
           <p className="text-3xl text-blue-800 font-bold">5,280</p>
         </div>

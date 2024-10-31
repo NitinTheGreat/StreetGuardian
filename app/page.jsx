@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase,  Clock, Gift, Star, CheckCircle } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle, Link } from 'lucide-react'
 
 const TypewriterEffect = ({ text }) => {
   const [displayText, setDisplayText] = useState('Wel')
@@ -71,7 +71,7 @@ const springAnimation = {
 
 const StepArrow = () => (
   <svg className="w-16 h-16 text-teal-400 mx-auto my-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 )
 
@@ -84,17 +84,17 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
-      
+
 
       <main>
         <Section>
           <div className="container mx-auto px-4  text-center   overflow-hidden min-h-screen flex items-center justify-center">
-            <motion.div 
+            <motion.div
               className="absolute inset-0 z-0"
               style={{ y: y1 }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-blue-400 opacity-30"></div>
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
                   backgroundImage: "url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1949&q=80')",
@@ -282,7 +282,7 @@ const LandingPage = () => {
                   <motion.button
                     whileHover={springAnimation}
                     className="mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
-                    onClick={() => setShowConfetti(true)}
+                    onClick={() => window.location.href= '/RewardsProgram'}
                   >
                     Join Rewards Program
                   </motion.button>
