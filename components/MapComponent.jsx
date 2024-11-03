@@ -95,7 +95,7 @@ export default function MapComponent({ locations, location, setLocation, isModal
   }, [locations]);
 
   return (
-    <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={center} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 1 }} >
       <ChangeView center={center} zoom={zoom} />
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
