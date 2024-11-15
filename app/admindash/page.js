@@ -7,7 +7,8 @@ import dynamic from 'next/dynamic'
 
 const AdminDashboard = () => {
   // const [map, setMap] = useState(null)
-  const [reportedCases, setReportedCases] = useState([])
+  const [reportedCasesMap, setReportedCasesMap] = useState([])
+  const [reportedCases, setreportedCases] = useState([])
   const [selectedCase, setSelectedCase] = useState(null)
   const [showModal, setShowModal] = useState(false)
 
@@ -26,21 +27,37 @@ const AdminDashboard = () => {
   )
 
   useEffect(() => {
-    fetchReportedCases()
+    fetchReportedCasesMap()
   }, [])
+  useEffect(() => {
+    fetchReportedCases()
+  }
+  , [])
 
-  const fetchReportedCases = async () => {
+  const fetchReportedCasesMap = async () => {
     try {
       // Fetch the locations from the CSV-based API
-      const response = await fetch('/api/reports');
+      const response = await fetch('/api/reportsMap');
       const data = await response.json();
 
       // Set the reported cases (locations) in state
-      setReportedCases(data);
+      setReportedCasesMap(data);
     } catch (error) {
       console.error('Error fetching reported cases:', error);
     }
   };
+  const fetchReportedCases = async () => {
+    try {
+      // Fetch the reported cases from the database
+      const response = await fetch('/api/reports');
+      const data = await response.json();
+
+      // Set the reported cases in state
+      setreportedCases(data);
+    } catch (error) {
+      console.error('Error fetching reported cases:', error);
+    }
+  }
 
 
   const openModal = (caseData) => {
@@ -87,7 +104,7 @@ const AdminDashboard = () => {
           <div className="w-full md:w-2/3 bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold text-blue-600 mb-4">Map Overview</h2>
             <div className="h-[400px] w-full rounded-md">
-              <MapComponent locations={reportedCases} />
+              <MapComponent locations={reportedCasesMap} />
             </div>
 
           </div>

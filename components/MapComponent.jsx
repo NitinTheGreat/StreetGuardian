@@ -34,6 +34,7 @@ function createHotspots(locations) {
   const hotspots = [];
 
   locations.forEach((loc) => {
+    if (!loc || typeof loc.lat !== 'number' || typeof loc.lng !== 'number') return; // Add check here
     let found = false;
 
     // Check if the location can be added to an existing hotspot
@@ -75,7 +76,6 @@ function MapEvents({ setLocation }) {
   return null;
 }
 
-
 // ChangeView component to center the map on a specific location
 function ChangeView({ center, zoom }) {
   const map = useMap();
@@ -101,7 +101,9 @@ export default function MapComponent({ locations, location, setLocation, isModal
 
       {/* Display all individual reported case locations as markers */}
       {locations && locations.map((loc, index) => (
-        <Marker key={index} position={loc} />
+        loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && ( // Add check here
+          <Marker key={index} position={loc} />
+        )
       ))}
 
       {/* Display a circle for each hotspot */}
