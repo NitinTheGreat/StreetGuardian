@@ -8,12 +8,12 @@ import { Button } from "@/components/ui/button"
 import { Clock, Gift, Users, Heart } from 'lucide-react'
 
 const RewardsProgram = () => {
-  const contributionCategories = [
-    { icon: Clock, title: "Volunteer Hours", value: "120 hours" },
-    { icon: Heart, title: "Donations", value: "$1,500" },
-    { icon: Users, title: "Referrals", value: "15 people" },
-    { icon: Gift, title: "Community Engagement", value: "45 events" },
-  ]
+  // const contributionCategories = [
+  //   { icon: Clock, title: "Volunteer Hours", value: "120 hours" },
+  //   { icon: Heart, title: "Donations", value: "$1,500" },
+  //   { icon: Users, title: "Referrals", value: "15 people" },
+  //   { icon: Gift, title: "Community Engagement", value: "45 events" },
+  // ]
 
   const rewardItems = [
     ...Array(10).fill(null).map((_, i) => ({ type: 'Voucher', id: i + 1 })),
