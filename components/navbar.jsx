@@ -2,17 +2,19 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MenuIcon, XIcon } from '@heroicons/react/solid';
+import { MenuIcon, XIcon } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-teal-400 to-blue-500 shadow-md">
-      <nav className="container mx-auto px-4 py-3">
+      <nav className="container mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-white hover:text-teal-100 transition-colors duration-300">
+          <Link href="/" className="flex items-center text-xl font-bold text-white hover:text-teal-100 transition-colors duration-300">
+            <Image src="/images/logo.png" alt="StreetGuardian Logo" width={50} height={50} className="mr-2" />
             StreetGuardian
           </Link>
           {/* Mobile menu toggle */}
@@ -52,7 +54,7 @@ const Navbar = () => {
             <li>
               <Link
                 href="/sos"
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded-full transition-colors duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 SOS
               </Link>
