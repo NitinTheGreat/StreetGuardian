@@ -1,37 +1,24 @@
 'use client'
+
 import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle, ArrowDown } from 'lucide-react'
 
-const TypewriterEffect = ({ text }) => {
-  const [displayText, setDisplayText] = useState('Wel')
-  const [index, setIndex] = useState(3)
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isDeleting && index < text.length) {
-        setDisplayText(text.slice(0, index + 1))
-        setIndex(index + 1)
-      } else if (isDeleting && index > 3) {
-        setDisplayText(text.slice(0, index - 1))
-        setIndex(index - 1)
-      } else if (index === text.length) {
-        setIsDeleting(true)
-      } else if (index === 3) {
-        setIsDeleting(false)
-      }
-    }, isDeleting ? 50 : 150)
-
-    return () => clearTimeout(timer)
-  }, [index, isDeleting, text])
-
-  return <span>{displayText}</span>
+const FadeInEffect = ({ children }) => {
+  return (
+    <motion.span
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 2 }}
+    >
+      {children}
+    </motion.span>
+  )
 }
 
-const Section = ({ children, id = '' }) => {
+const FadeInSection = ({ children }) => {
   const controls = useAnimation()
   const [ref, inView] = useInView({
     triggerOnce: false,
@@ -41,26 +28,33 @@ const Section = ({ children, id = '' }) => {
   useEffect(() => {
     if (inView) {
       controls.start('visible')
-    } else {
-      controls.start('hidden')
     }
   }, [controls, inView])
 
   return (
-    <motion.section
-      id={id}
+    <motion.div
       ref={ref}
       animate={controls}
       initial="hidden"
       variants={{
         visible: { opacity: 1, y: 0 },
-        hidden: { opacity: 0, y: 50 }
+        hidden: { opacity: 0, y: 20 }
       }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="py-16 md:py-24"
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
       {children}
-    </motion.section>
+    </motion.div>
+  )
+}
+
+const GlowingHeading = ({ children }) => {
+  return (
+    <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center relative">
+      <span className="relative z-10 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+        {children}
+      </span>
+      <span className="absolute inset-0 bg-teal-200 filter blur-lg opacity-50"></span>
+    </h2>
   )
 }
 
@@ -69,84 +63,83 @@ const springAnimation = {
   transition: { type: 'spring', stiffness: 300, damping: 10 }
 }
 
-const StepArrow = () => (
-  <svg className="w-16 h-16 text-teal-400 mx-auto my-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 5V19M12 19L5 12M12 19L19 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
-
 const LandingPage = () => {
-  // const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
   const { scrollY } = useScroll()
   const y1 = useTransform(scrollY, [0, 300], [0, 50])
-  // const y2 = useTransform(scrollY, [0, 300], [0, -50])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50">
-
-
       <main>
-        <Section>
-          <div className="container mx-auto px-4  text-center   overflow-hidden min-h-screen flex items-center justify-center">
-            <motion.div
-              className="absolute inset-0 z-0"
-              style={{ y: y1 }}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="relative h-screen flex items-center justify-center overflow-hidden"
+        >
+          <motion.div
+            className="absolute inset-0 z-0"
+            style={{ y: y1 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-blue-400 opacity-30"></div>
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{
+                backgroundImage: "url('https://images.unsplash.com/photo-1518398046578-8cca57782e17?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')",
+                filter: 'grayscale(30%)'
+              }}
+            ></div>
+          </motion.div>
+          <div className="relative z-10 bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-full max-w-4xl mx-4">
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="text-5xl md:text-7xl font-bold mb-6 text-teal-800 text-center relative"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-teal-400 to-blue-400 opacity-30"></div>
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1949&q=80')",
-                  filter: 'grayscale(50%)'
-                }}
-              ></div>
-            </motion.div>
-            <div className="relative z-10 bg-white/80 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-3xl">
-              <motion.h1
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent"
+              <FadeInEffect>
+                <span className="relative z-10">
+                  Welcome to StreetGuardian
+                </span>
+                <span className="absolute inset-0 bg-teal-200 filter blur-lg opacity-50"></span>
+              </FadeInEffect>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="text-xl md:text-2xl mb-8 text-gray-700 text-center"
+            >
+              Empowering communities to support those in need
+            </motion.p>
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <motion.button
+                whileHover={springAnimation}
+                className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 relative overflow-hidden group"
               >
-                <TypewriterEffect text="Welcome to StreetGuardian" />
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 1 }}
-                className="text-xl md:text-2xl mb-8 text-gray-700"
+                <span className="relative z-10">Get Started</span>
+                <span className="absolute inset-0 bg-white opacity-25 group-hover:animate-pulse"></span>
+              </motion.button>
+              <motion.button
+                whileHover={springAnimation}
+                className="w-full sm:w-auto border-2 border-teal-600 text-teal-600 font-semibold py-3 px-8 rounded-full hover:bg-teal-600 hover:text-white transition duration-300"
               >
-                Empowering communities to support those in need
-              </motion.p>
-              <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <motion.button
-                  whileHover={springAnimation}
-                  className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300"
-                >
-                  Get Started
-                </motion.button>
-                <motion.button
-                  whileHover={springAnimation}
-                  className="w-full sm:w-auto border-2 border-teal-600 text-teal-600 font-semibold py-3 px-8 rounded-full hover:bg-teal-600 hover:text-white transition duration-300"
-                >
-                  Learn More
-                </motion.button>
-              </div>
+                Learn More
+              </motion.button>
             </div>
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
-            >
-              <ChevronDown size={32} className="text-white" />
-            </motion.div>
           </div>
-        </Section>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
+          >
+            <ChevronDown size={32} className="text-white" />
+          </motion.div>
+        </motion.div>
 
-        <Section>
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Our Mission</h2>
+        <FadeInSection>
+          <div className="container mx-auto px-4 py-16">
+            <GlowingHeading>Our Mission</GlowingHeading>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300">
               <div className="grid md:grid-cols-2">
                 <div className="p-8">
@@ -185,11 +178,11 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-        </Section>
+        </FadeInSection>
 
-        <Section>
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">How StreetGuardian Works</h2>
+        <FadeInSection>
+          <div className="container mx-auto px-4 py-16">
+            <GlowingHeading>How StreetGuardian Works</GlowingHeading>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 { icon: MapPin, title: 'Locate', description: 'Identify individuals in need of assistance through our user-friendly app' },
@@ -198,8 +191,8 @@ const LandingPage = () => {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  className="flex flex-col items-center text-center bg-white p-6 rounded-2xl shadow-lg"
-                  whileHover={springAnimation}
+                  className="flex flex-col items-center text-center bg-white p-6 rounded-2xl shadow-lg transition-all duration-300 hover:shadow-xl"
+                  whileHover={{ scale: 1.05 }}
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2 }}
@@ -213,45 +206,43 @@ const LandingPage = () => {
               ))}
             </div>
           </div>
-        </Section>
+        </FadeInSection>
 
-        <Section>
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center p-2 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Our Step-by-Step Approach</h2>
-            <div className="space-y-8">
+        <FadeInSection>
+          <div className="container mx-auto px-4 py-16">
+            <GlowingHeading>Our Step-by-Step Approach</GlowingHeading>
+            <div className="w-full">
               {[
-                { step: 1, title: 'Report', description: 'Users can report individuals in need through our easy-to-use mobile app or website.', icon: Phone },
-                { step: 2, title: 'Assess', description: 'Our trained team quickly assesses the situation and determines the most appropriate course of action.', icon: Briefcase },
-                { step: 3, title: 'Connect', description: 'We connect the individual with nearby shelters, healthcare providers, or other relevant support services.', icon: MapPin },
-                { step: 4, title: 'Follow-up', description: 'Our team conducts regular follow-ups to ensure the individual is receiving the necessary support and care.', icon: Clock },
-                { step: 5, title: 'Community Engagement', description: 'We involve local communities in providing long-term support and reintegration assistance.', icon: Users }
+                { step: 1, title: 'Report', description: 'Users report individuals in need via our app', icon: Phone },
+                { step: 2, title: 'Assess', description: 'Our team assesses the situation quickly', icon: Briefcase },
+                { step: 3, title: 'Connect', description: 'We link individuals with support services', icon: MapPin },
+                { step: 4, title: 'Follow-up', description: 'Regular check-ins ensure ongoing support', icon: Clock },
+                { step: 5, title: 'Engage', description: 'Community involvement for long-term support', icon: Users }
               ].map((item, index) => (
-                <div key={index}>
-                  <motion.div
-                    className="flex items-center bg-white p-6 rounded-2xl shadow-lg"
-                    whileHover={springAnimation}
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.2 }}
-                  >
-                    <div className="bg-gradient-to-r from-teal-200 to-blue-200 p-4 rounded-full mr-6 flex-shrink-0">
-                      <item.icon size={32} className="text-teal-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-2xl font-semibold mb-2 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Step {item.step}: {item.title}</h3>
-                      <p className="text-gray-600">{item.description}</p>
-                    </div>
-                  </motion.div>
-                  {index < 4 && <StepArrow />}
-                </div>
+                <motion.div
+                  key={index}
+                  className="bg-white p-6 rounded-2xl shadow-lg w-full flex items-center mb-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  viewport={{ once: true, amount: 0.8 }}
+                >
+                  <div className="bg-gradient-to-r from-teal-200 to-blue-200 p-3 rounded-full mr-4 flex-shrink-0">
+                    <item.icon size={24} className="text-teal-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Step {item.step}: {item.title}</h3>
+                    <p className="text-gray-600">{item.description}</p>
+                  </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </Section>
+        </FadeInSection>
 
-        <Section>
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 p-2 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Rewards Program</h2>
+        <FadeInSection>
+          <div className="container mx-auto px-4 py-16">
+            <GlowingHeading>Rewards Program</GlowingHeading>
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
               <div className="grid md:grid-cols-2">
                 <div className="p-8">
@@ -282,7 +273,7 @@ const LandingPage = () => {
                   <motion.button
                     whileHover={springAnimation}
                     className="mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
-                    onClick={() => window.location.href= '/RewardsPage'}
+                    onClick={() => window.location.href= '/RewardsProgram'}
                   >
                     Join Rewards Program
                   </motion.button>
@@ -301,11 +292,11 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
-        </Section>
+        </FadeInSection>
 
-        <Section>
-          <div className="container mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">Join Our Community</h2>
+        <FadeInSection>
+          <div className="container mx-auto px-4 py-16">
+            <GlowingHeading>Join Our Community</GlowingHeading>
             <div className="bg-white p-8 rounded-3xl shadow-xl">
               <p className="text-lg mb-6 text-center text-gray-600">
                 Stay updated with our latest initiatives, success stories, and volunteer opportunities. Together, we can make a lasting difference in the lives of those experiencing homelessness.
@@ -320,12 +311,12 @@ const LandingPage = () => {
                   whileHover={springAnimation}
                   className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
                 >
-                  Subscribe
+                  Send me an e-mail!
                 </motion.button>
               </form>
             </div>
           </div>
-        </Section>
+        </FadeInSection>
       </main>
 
       <footer className="bg-gradient-to-r from-teal-600 to-blue-600 text-white py-12 rounded-t-3xl mt-16">
@@ -386,3 +377,4 @@ const LandingPage = () => {
 }
 
 export default LandingPage
+
