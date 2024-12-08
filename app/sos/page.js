@@ -47,6 +47,7 @@ export default function SOSPage() {
             severity: selectedSeverity,
             description,
           }),
+          console:log('SOS request:', { location: userLocation, serviceType: selectedService, severity: selectedSeverity, description }),
         });
 
         if (response.ok) {
