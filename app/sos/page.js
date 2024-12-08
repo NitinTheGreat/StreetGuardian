@@ -1,83 +1,37 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiMapPin, FiPhone, FiAlertCircle, FiSend } from 'react-icons/fi';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FiAlertCircle, FiMapPin } from 'react-icons/fi';
+import dynamic from 'next/dynamic';
 
-const useGeoLocation = () => {
-  const [location, setLocation] = useState(null);
+// Dynamically import the Map component with no SSR
+const Map = dynamic(() => import('./Map'), { ssr: false });
+
+export default function SOSPage() {
+  const [selectedService, setSelectedService] = useState('hospital');
+  const [selectedSeverity, setSelectedSeverity] = useState('warning');
+  const [description, setDescription] = useState('');
+  const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && navigator.geolocation) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
+          setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
         },
         (error) => {
           console.error('Error getting location:', error);
+          alert('Unable to retrieve your location. Please check your browser settings and try again.');
         }
       );
+    } else {
+      alert('Geolocation is not supported by your browser');
     }
   }, []);
-
-  return location;
-};
-
-const Map = ({ userLocation }) => {
-  const mapContainerRef = useRef(null);
-  const mapRef = useRef(null);
-
-  useEffect(() => {
-    if (mapContainerRef.current && userLocation) {
-      if (!mapRef.current) {
-        mapRef.current = L.map(mapContainerRef.current, {
-          zoomControl: false,
-          attributionControl: false,
-        }).setView([userLocation.lat, userLocation.lng], 15);
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-        }).addTo(mapRef.current);
-      } else {
-        mapRef.current.setView([userLocation.lat, userLocation.lng], 15);
-      }
-
-      const customIcon = L.icon({
-        iconUrl: '/marker-icon.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowUrl: '/marker-shadow.png',
-        shadowSize: [41, 41],
-      });
-
-      L.marker([userLocation.lat, userLocation.lng], { icon: customIcon })
-        .addTo(mapRef.current)
-        .bindPopup('Your location')
-        .openPopup();
-    }
-
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, [userLocation]);
-
-  return <div ref={mapContainerRef} className="w-full h-full rounded-2xl overflow-hidden" />;
-};
-
-export default function SOSPage() {
-  const [selectedService, setSelectedService] = useState('hospital');
-  const [selectedSeverity, setSelectedSeverity] = useState('warning');
-  const [description, setDescription] = useState('');
-  const userLocation = useGeoLocation();
 
   const handleSOSSubmit = async () => {
     if (userLocation) {
@@ -96,6 +50,8 @@ export default function SOSPage() {
         });
 
         if (response.ok) {
+          const result = await response.json();
+          console.log('SOS request submitted:', result);
           setDescription('');
           alert('SOS request submitted successfully!');
         } else {
@@ -105,12 +61,14 @@ export default function SOSPage() {
         console.error('Error submitting SOS request:', error);
         alert('An error occurred. Please try again.');
       }
+    } else {
+      alert('Unable to determine your location. Please ensure location services are enabled.');
     }
   };
 
   return (
     <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br from-teal-200 to-blue-500 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <motion.div
+      <motion.div 
         className="max-w-7xl mx-auto bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -118,7 +76,7 @@ export default function SOSPage() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
           <div className="space-y-8">
-            <motion.h1
+            <motion.h1 
               className="text-5xl font-extrabold text-white text-center lg:text-left"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -126,7 +84,7 @@ export default function SOSPage() {
             >
               SOS Emergency
             </motion.h1>
-            <motion.p
+            <motion.p 
               className="text-xl text-white text-center lg:text-left"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -134,7 +92,7 @@ export default function SOSPage() {
             >
               Quick help when you need it most. Stay safe, stay connected.
             </motion.p>
-            <motion.div
+            <motion.div 
               className="space-y-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -148,8 +106,8 @@ export default function SOSPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={`py-2 px-6 rounded-full text-lg font-medium transition-colors duration-200 ${
-                      selectedService === service
-                        ? 'bg-white text-blue-600'
+                      selectedService === service 
+                        ? 'bg-white text-blue-600' 
                         : 'bg-blue-600 bg-opacity-50 text-white hover:bg-opacity-75'
                     }`}
                     onClick={() => setSelectedService(service)}
@@ -159,7 +117,7 @@ export default function SOSPage() {
                 ))}
               </div>
             </motion.div>
-            <motion.div
+            <motion.div 
               className="space-y-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -173,8 +131,8 @@ export default function SOSPage() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={`py-2 px-6 rounded-full text-lg font-medium transition-colors duration-200 ${
-                      selectedSeverity === severity
-                        ? 'bg-white text-blue-600'
+                      selectedSeverity === severity 
+                        ? 'bg-white text-blue-600' 
                         : 'bg-blue-600 bg-opacity-50 text-white hover:bg-opacity-75'
                     }`}
                     onClick={() => setSelectedSeverity(severity)}
@@ -184,7 +142,7 @@ export default function SOSPage() {
                 ))}
               </div>
             </motion.div>
-            <motion.div
+            <motion.div 
               className="space-y-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -210,7 +168,7 @@ export default function SOSPage() {
               Send SOS Alert
             </motion.button>
           </div>
-          <motion.div
+          <motion.div 
             className="h-[calc(100vh-15vh)] lg:h-auto relative rounded-2xl overflow-hidden shadow-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -23,19 +23,35 @@ const AdminDashboard = () => {
 
   const router = useRouter()
 
-  const emergencyData = [
+  // Hardcoded data for fallback
+  const hardcodedEmergencyData = [
     { id: 1, text: 'Emergency situation reported at Main St.', type: 'urgent' },
     { id: 2, text: 'Fire alarm triggered in Building A', type: 'critical' },
     { id: 3, text: 'Medical assistance needed at Park Ave.', type: 'urgent' },
     { id: 4, text: 'Security breach detected in Sector 7', type: 'warning' },
     { id: 5, text: 'Traffic accident reported on Highway 101', type: 'urgent' },
   ]
+  const [emergencyData, setEmergencyData] = useState(hardcodedEmergencyData)
 
   useEffect(() => {
+    fetchSOSCases()
     fetchReportedCasesMap()
     fetchReportedCases()
     checkAdminStatus()
   }, [])
+
+  const fetchSOSCases = async () => {
+    try {
+      const response = await fetch('/api/sos')
+      if (!response.ok) throw new Error('Failed to fetch data')
+      const data = await response.json()
+      setEmergencyData(data)
+    } catch (error) {
+      console.error('Error fetching SOS cases:', error)
+      setEmergencyData(hardcodedEmergencyData) // Fallback to hardcoded data
+    }
+  }
+
 
   const fetchReportedCasesMap = async () => {
     try {
