@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import mongoose from 'mongoose'
-import User from '@/../../../StreetGuardian2.0/lib/models/user'
+import User from '@/../../lib/models/user'
 
 export async function POST(request) {
   try {

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -8,12 +8,37 @@ import { Button } from "@/components/ui/button"
 import { Heart, Users, Gift } from 'lucide-react'
 
 const RewardsProgram = () => {
-  const [userPoints, setUserPoints] = useState(5280)
-  const [notification, setNotification] = useState(null)
+  const [userPoints, setUserPoints] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchUserPoints()
+  }, [])
+
+  const fetchUserPoints = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/get-user-points')
+      if (response.ok) {
+        const data = await response.json()
+        setUserPoints(data.points)
+        setError(null)
+      } else {
+        throw new Error('Failed to fetch user points')
+      }
+    } catch (error) {
+      console.error('Error fetching user points:', error)
+      setError('Failed to fetch user points. Please try again later.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const contributionCategories = [
-    { icon: Heart, title: "Donations", value: "$1,500", points: 100 },
-    { icon: Users, title: "Referrals", value: "15 people", points: 50 },
-    { icon: Gift, title: "Community Engagement", value: "45 events", points: 75 },
+    { icon: Heart, title: "Donations", value: "$1,500" },
+    { icon: Users, title: "Referrals", value: "15 people" },
+    { icon: Gift, title: "Community Engagement", value: "45 events" },
   ]
 
   const rewardItems = [
@@ -21,47 +46,21 @@ const RewardsProgram = () => {
     ...Array(10).fill(null).map((_, i) => ({ type: 'GiftCard', id: i + 1 })),
   ]
 
-  const handleReport = async (category) => {
-    try {
-      const response = await fetch('/api/report-contribution', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ category: category.title, points: category.points }),
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setUserPoints(data.newPoints)
-        setNotification({
-          type: 'success',
-          message: `You've earned ${category.points} points for your ${category.title}!`
-        })
-      } else {
-        throw new Error('Failed to report contribution')
-      }
-    } catch (error) {
-      console.error('Error reporting contribution:', error)
-      setNotification({
-        type: 'error',
-        message: "Failed to report contribution. Please try again."
-      })
-    }
-
-    // Clear notification after 3 seconds
-    setTimeout(() => setNotification(null), 3000)
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500">
+        <div className="text-2xl font-bold text-white">Loading...</div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500 p-8">
       <div className="max-w-7xl mx-auto">
-        {/* Notification */}
-        {notification && (
-          <div className={`fixed top-4 right-4 p-4 rounded-md shadow-md ${
-            notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
-          } text-white`}>
-            {notification.message}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
           </div>
         )}
 
@@ -88,13 +87,7 @@ const RewardsProgram = () => {
               <CardContent className="flex flex-col items-center p-6">
                 <category.icon className="w-12 h-12 text-blue-600 mb-4" />
                 <h3 className="text-lg font-semibold text-blue-800 mb-2">{category.title}</h3>
-                <p className="text-blue-600 font-bold mb-4">{category.value}</p>
-                <Button 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={() => handleReport(category)}
-                >
-                  Report {category.title}
-                </Button>
+                <p className="text-blue-600 font-bold">{category.value}</p>
               </CardContent>
             </Card>
           ))}
