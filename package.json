@@ -17,6 +17,7 @@
     "@radix-ui/react-tabs": "^1.1.1",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
+    "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "csv-parse": "^5.5.6",
