@@ -1,67 +1,49 @@
-'use client';
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
-import 'leaflet-routing-machine';
 
-const Map = ({ userLocation, nearestLocation }) => {
+const Map = ({ userLocation }) => {
+  const mapContainerRef = useRef(null);
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+
   useEffect(() => {
-    if (typeof window !== 'undefined' && userLocation) {
-      const map = L.map('map').setView([userLocation.lat, userLocation.lng], 13);
+    if (!mapContainerRef.current) return;
 
+    // Initialize map
+    if (!mapRef.current) {
+      mapRef.current = L.map(mapContainerRef.current, {
+        zoomControl: true,
+        attributionControl: true,
+      }).setView([userLocation.lat, userLocation.lng], 15);
+
+      // Add tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+        maxZoom: 19,
+      }).addTo(mapRef.current);
 
-      const userIcon = L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+      // Add marker
+      const customIcon = L.icon({
+        iconUrl: '/marker-icon.png', // Replace with your marker icon path
         iconSize: [25, 41],
         iconAnchor: [12, 41],
         popupAnchor: [1, -34],
+        shadowUrl: '/marker-shadow.png',
+        shadowSize: [41, 41],
       });
 
-      const serviceIcon = L.icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-      });
-
-      L.marker([userLocation.lat, userLocation.lng], { icon: userIcon })
-        .addTo(map)
+      markerRef.current = L.marker([userLocation.lat, userLocation.lng], { icon: customIcon })
+        .addTo(mapRef.current)
         .bindPopup('Your Location')
         .openPopup();
-
-      if (nearestLocation) {
-        L.marker([nearestLocation.lat, nearestLocation.lng], { icon: serviceIcon })
-          .addTo(map)
-          .bindPopup(nearestLocation.name)
-          .openPopup();
-
-        L.Routing.control({
-          waypoints: [
-            L.latLng(userLocation.lat, userLocation.lng),
-            L.latLng(nearestLocation.lat, nearestLocation.lng)
-          ],
-          lineOptions: {
-            styles: [{ color: 'red', opacity: 0.6, weight: 4 }]
-          },
-          addWaypoints: false,
-          draggableWaypoints: false,
-          fitSelectedRoutes: true,
-          showAlternatives: false
-        }).addTo(map);
-      }
-
-      return () => {
-        map.remove();
-      };
+    } else if (markerRef.current) {
+      // Update marker position if map already initialized
+      markerRef.current.setLatLng([userLocation.lat, userLocation.lng]);
+      mapRef.current.setView([userLocation.lat, userLocation.lng], 15);
     }
-  }, [userLocation, nearestLocation]);
+  }, [userLocation]);
 
-  return  <div id="map" style={{ height: '100%', width: '100%' }}></div>;
+  return <div ref={mapContainerRef} className="w-full h-full rounded-2xl overflow-hidden" />;
 };
 
 export default Map;

@@ -216,10 +216,10 @@ const EmergencyCard = ({ item }) => {
     >
       <p className={`${textColor} mb-4`}>{item.text}</p>
       <div className="flex justify-end space-x-2">
-        <Button size="sm" variant="outline" className="rounded-full">
+        {/* <Button size="sm" variant="outline" className="rounded-full">
           <Check className="w-4 h-4 mr-2" />
           Approve
-        </Button>
+        </Button> */}
         <Button size="sm" variant="outline" className="rounded-full">
           <MapPin className="w-4 h-4 mr-2" />
           Locate
