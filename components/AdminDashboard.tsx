@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu, Activity, Users, Clock, Shield } from 'lucide-react'
+import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-const MapComponent = dynamic(() => import('../../components/MapComponent'), { ssr: false })
+const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false })
 
 const AdminDashboard = () => {
   const [reportedCasesMap, setReportedCasesMap] = useState([])
@@ -99,10 +99,10 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br from-cyan-200 to-blue-500 pt-[7vh]">
+    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="ghost" className="fixed top-[calc(7vh+1rem)] left-4 z-50 lg:hidden">
+          <Button variant="ghost" className="fixed top-4 left-4 z-50 lg:hidden">
             <Menu className="h-6 w-6" />
           </Button>
         </SheetTrigger>
@@ -121,19 +121,19 @@ const AdminDashboard = () => {
         
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="overview" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">Overview</TabsTrigger>
-            <TabsTrigger value="map" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">Map</TabsTrigger>
-            <TabsTrigger value="reports" className="data-[state=active]:bg-blue-500 data-[state=active]:text-white">Reports</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="map">Map</TabsTrigger>
+            <TabsTrigger value="reports">Reports</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-300 rounded-2xl overflow-hidden shadow-xl">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-blue-600">SOS: Emergencies</CardTitle>
+                  <CardTitle>SOS: Emergencies</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ScrollArea className="h-[400px] pr-4">
+                  <ScrollArea className="h-[400px]">
                     {emergencyData.map((item) => (
                       <EmergencyCard key={item.id} item={item} />
                     ))}
@@ -141,16 +141,16 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
               
-              <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-300 rounded-2xl overflow-hidden shadow-xl">
+              <Card>
                 <CardHeader>
-                  <CardTitle className="text-blue-600">Quick Stats</CardTitle>
+                  <CardTitle>Quick Stats</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 gap-4">
-                    <StatCard title="Active Cases" value="23" change="+5" icon={Activity} />
-                    <StatCard title="Resolved Today" value="17" change="+3" icon={Check} />
-                    <StatCard title="Response Time" value="8m" change="-2m" icon={Clock} />
-                    <StatCard title="Team Members" value="12" change="0" icon={Users} />
+                    <StatCard title="Active Cases" value="23" change="+5" />
+                    <StatCard title="Resolved Today" value="17" change="+3" />
+                    <StatCard title="Response Time" value="8m" change="-2m" />
+                    <StatCard title="Team Members" value="12" change="0" />
                   </div>
                 </CardContent>
               </Card>
@@ -158,12 +158,12 @@ const AdminDashboard = () => {
           </TabsContent>
           
           <TabsContent value="map">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-300 rounded-2xl overflow-hidden shadow-xl">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-blue-600">Crisis Map</CardTitle>
+                <CardTitle>Crisis Map</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-[600px] w-full rounded-xl overflow-hidden">
+                <div className="h-[600px] w-full rounded-md overflow-hidden">
                   <MapComponent locations={reportedCasesMap} />
                 </div>
               </CardContent>
@@ -171,9 +171,9 @@ const AdminDashboard = () => {
           </TabsContent>
           
           <TabsContent value="reports">
-            <Card className="bg-white/90 backdrop-blur-sm border-2 border-blue-300 rounded-2xl overflow-hidden shadow-xl">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-blue-600">Reported Cases</CardTitle>
+                <CardTitle>Reported Cases</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -205,22 +205,21 @@ const AdminDashboard = () => {
 const EmergencyCard = ({ item }) => {
   const bgColor = item.type === 'critical' ? 'bg-red-100' : item.type === 'urgent' ? 'bg-orange-100' : 'bg-yellow-100'
   const textColor = item.type === 'critical' ? 'text-red-800' : item.type === 'urgent' ? 'text-orange-800' : 'text-yellow-800'
-  const borderColor = item.type === 'critical' ? 'border-red-300' : item.type === 'urgent' ? 'border-orange-300' : 'border-yellow-300'
 
   return (
     <motion.div
-      className={`${bgColor} rounded-xl shadow-md p-4 mb-4 border-2 ${borderColor}`}
+      className={`${bgColor} rounded-lg shadow-md p-4 mb-4`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: item.id * 0.1 }}
     >
       <p className={`${textColor} mb-4`}>{item.text}</p>
       <div className="flex justify-end space-x-2">
-        <Button size="sm" variant="outline" className="rounded-full">
+        <Button size="sm" variant="outline">
           <Check className="w-4 h-4 mr-2" />
           Approve
         </Button>
-        <Button size="sm" variant="outline" className="rounded-full">
+        <Button size="sm" variant="outline">
           <MapPin className="w-4 h-4 mr-2" />
           Locate
         </Button>
@@ -230,11 +229,11 @@ const EmergencyCard = ({ item }) => {
 }
 
 const ReportedCaseCard = ({ item, openModal }) => (
-  <Card className="bg-white/80 backdrop-blur-sm border-2 border-blue-200 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+  <Card>
     <CardContent className="pt-6">
-      <h3 className="font-semibold mb-2 text-blue-700">{item.landmark}</h3>
-      <p className="text-sm text-gray-600 mb-4">Case ID: {item.userId}</p>
-      <Button onClick={() => openModal(item)} className="w-full rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300">
+      <h3 className="font-semibold mb-2">{item.landmark}</h3>
+      <p className="text-sm text-gray-500 mb-4">Reported by: {item.userId}</p>
+      <Button onClick={() => openModal(item)} className="w-full">
         View Details
       </Button>
     </CardContent>
@@ -246,31 +245,31 @@ const CaseDetailsModal = ({ selectedCase, closeModal }) => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
   >
     <motion.div
       initial={{ y: -50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       exit={{ y: 50, opacity: 0 }}
-      className="bg-white p-8 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-auto shadow-2xl border-4 border-blue-300"
+      className="bg-white p-8 rounded-lg w-full max-w-4xl max-h-[90vh] overflow-auto"
     >
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold text-blue-600">Case Details</h2>
-        <Button variant="ghost" onClick={closeModal} className="rounded-full">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-gray-800">Case Details</h2>
+        <Button variant="ghost" onClick={closeModal}>
           <X className="h-6 w-6" />
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
-          <p className="mb-2"><strong className="text-blue-600">Case ID:</strong> {selectedCase.userId}</p>
-          <p className="mb-2"><strong className="text-blue-600">Landmark:</strong> {selectedCase.landmark}</p>
-          <p className="mb-4"><strong className="text-blue-600">Comments:</strong> {selectedCase.comments}</p>
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-4 text-blue-600">Images:</h3>
+          <p><strong>Reported by:</strong> {selectedCase.userId}</p>
+          <p><strong>Landmark:</strong> {selectedCase.landmark}</p>
+          <p><strong>Comments:</strong> {selectedCase.comments}</p>
+          <div className="mt-4">
+            <h3 className="text-lg font-semibold mb-2">Images:</h3>
             <ImageCarousel images={selectedCase.images} />
           </div>
         </div>
-        <div className="h-[300px] rounded-xl overflow-hidden shadow-lg">
+        <div className="h-[300px]">
           <MapComponent location={selectedCase.location} />
         </div>
       </div>
@@ -283,17 +282,17 @@ const UnauthorizedModal = ({ closeModal, router }) => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
   >
-    <motion.div className="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-md border-4 border-red-300">
-      <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-      <h2 className="text-3xl font-bold text-red-600 mb-4">Access Denied</h2>
-      <p className="mb-8 text-gray-700">You are not authorized to view these details.</p>
+    <motion.div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md">
+      <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+      <h2 className="text-2xl font-bold text-red-600 mb-4">Access Denied</h2>
+      <p className="mb-6 text-gray-700">You are not authorized to view these details.</p>
       <div className="flex justify-center space-x-4">
-        <Button onClick={() => router.push('/adminlogin')} variant="default" className="rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-300">
+        <Button onClick={() => router.push('/adminlogin')} variant="default">
           Go to Admin Login
         </Button>
-        <Button onClick={closeModal} variant="outline" className="rounded-full">
+        <Button onClick={closeModal} variant="outline">
           Cancel
         </Button>
       </div>
@@ -319,7 +318,7 @@ const ImageCarousel = ({ images }) => {
           key={currentIndex}
           src={images[currentIndex]}
           alt={`Image ${currentIndex + 1}`}
-          className="w-full h-full object-cover rounded-xl"
+          className="w-full h-full object-cover rounded-lg"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -327,36 +326,33 @@ const ImageCarousel = ({ images }) => {
         />
       </AnimatePresence>
       <Button
-        className="absolute top-1/2 left-2 transform -translate-y-1/2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-300"
+        className="absolute top-1/2 left-2 transform -translate-y-1/2 rounded-full"
         size="icon"
-        variant="ghost"
+        variant="outline"
         onClick={prevImage}
       >
-        <ChevronLeft className="w-6 h-6 text-blue-600" />
+        <ChevronLeft className="w-4 h-4" />
       </Button>
       <Button
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 rounded-full bg-white/50 hover:bg-white/75 transition-colors duration-300"
+        className="absolute top-1/2 right-2 transform -translate-y-1/2 rounded-full"
         size="icon"
-        variant="ghost"
+        variant="outline"
         onClick={nextImage}
       >
-        <ChevronRight className="w-6 h-6 text-blue-600" />
+        <ChevronRight className="w-4 h-4" />
       </Button>
     </div>
   )
 }
 
-const StatCard = ({ title, value, change, icon: Icon }) => {
+const StatCard = ({ title, value, change }) => {
   const isPositive = change.startsWith('+')
   return (
-    <Card className="bg-white/80 backdrop-blur-sm border-2 border-blue-200 rounded-xl overflow-hidden shadow-lg">
+    <Card>
       <CardContent className="pt-6">
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <Icon className="w-6 h-6 text-blue-500" />
-        </div>
-        <div className="flex items-baseline">
-          <p className="text-2xl font-semibold text-blue-700">{value}</p>
+        <p className="text-sm font-medium text-gray-500">{title}</p>
+        <div className="flex items-baseline mt-4">
+          <p className="text-2xl font-semibold text-gray-900">{value}</p>
           <p className={`ml-2 flex items-baseline text-sm font-semibold ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
             {change}
           </p>
@@ -367,3 +363,4 @@ const StatCard = ({ title, value, change, icon: Icon }) => {
 }
 
 export default AdminDashboard
+
