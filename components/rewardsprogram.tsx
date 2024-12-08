@@ -1,19 +1,19 @@
-"use client"
+'use client'
 
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-
+import { Clock, Heart, Users, Gift } from 'lucide-react'
 
 const RewardsProgram = () => {
-  // const contributionCategories = [
-  //   { icon: Clock, title: "Volunteer Hours", value: "120 hours" },
-  //   { icon: Heart, title: "Donations", value: "$1,500" },
-  //   { icon: Users, title: "Referrals", value: "15 people" },
-  //   { icon: Gift, title: "Community Engagement", value: "45 events" },
-  // ]
+  const contributionCategories = [
+    { icon: Clock, title: "Volunteer Hours", value: "120 hours" },
+    { icon: Heart, title: "Donations", value: "$1,500" },
+    { icon: Users, title: "Referrals", value: "15 people" },
+    { icon: Gift, title: "Community Engagement", value: "45 events" },
+  ]
 
   const rewardItems = [
     ...Array(10).fill(null).map((_, i) => ({ type: 'Voucher', id: i + 1 })),
@@ -39,7 +39,18 @@ const RewardsProgram = () => {
           them to causes you care about.
         </p>
 
-       
+        {/* Contribution Categories */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+          {contributionCategories.map((category, index) => (
+            <Card key={index} className="bg-white shadow-lg">
+              <CardContent className="flex flex-col items-center p-6">
+                <category.icon className="w-12 h-12 text-blue-600 mb-4" />
+                <h3 className="text-lg font-semibold text-blue-800 mb-2">{category.title}</h3>
+                <p className="text-blue-600 font-bold">{category.value}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
         {/* Rewards Section */}
         <Card className="w-full bg-white shadow-lg">
@@ -76,3 +87,4 @@ const RewardsProgram = () => {
 }
 
 export default RewardsProgram
+
