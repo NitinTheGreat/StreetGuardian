@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, ComponentType } from "react";
 
-type ProtectedRouteProps = Record<string, unknown>; // Replace any with a safer type
+type ProtectedRouteProps = {}; // Define specific shared props if applicable.
 
 export default function ProtectedRoute<T extends ProtectedRouteProps>(
   Component: ComponentType<T>
 ) {
-  return function ProtectedComponent(props: T) {
+  const ProtectedComponent = (props: T) => {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -33,7 +33,7 @@ export default function ProtectedRoute<T extends ProtectedRouteProps>(
           if (response.ok) {
             setIsAuthorized(true);
           } else {
-            localStorage.removeItem("token"); // Remove invalid token
+            localStorage.removeItem("token");
             router.push("/login");
           }
         } catch (error) {
@@ -46,9 +46,11 @@ export default function ProtectedRoute<T extends ProtectedRouteProps>(
     }, [router]);
 
     if (!isAuthorized) {
-      return null; // Optionally render a loading indicator
+      return <div>Loading...</div>; // Optional loading indicator.
     }
 
     return <Component {...props} />;
   };
+
+  return ProtectedComponent;
 }
