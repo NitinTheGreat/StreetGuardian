@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { MapPin, Upload, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
-
+import { useRouter } from 'next/navigation'
 const Map = dynamic(() => import('../../components/MapComponent'), { ssr: false })
 
 const containerVariants = {
@@ -48,6 +48,7 @@ function ReportPage() {
   const [landmark, setLandmark] = useState('')
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [badgeMessage, setBadgeMessage] = useState('');
+  const router = useRouter()
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length + images.length > 3) {
@@ -101,7 +102,10 @@ function ReportPage() {
       const data = await response.json();
       if (response.ok) {
         setBadgeMessage('Thanks for submitting!');
-        setTimeout(() => setBadgeMessage(''), 3000); // Hide the message after 3 seconds
+        setTimeout(() => setBadgeMessage(''),4000); 
+        setTimeout(() => {
+          router.push('/rewards');
+        }, 4000);
       } else {
         alert(data.message);
       }
@@ -257,7 +261,7 @@ function ReportPage() {
                   initial={{ opacity: 0, y: -50 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -50 }}
-                  className="fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg"
+                  className="fixed top-14 right-4 bg-green-500 text-white px-4 py-2 rounded-full shadow-lg"
                 >
                   {badgeMessage}
                 </motion.div>
