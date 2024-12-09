@@ -336,7 +336,7 @@ const LandingPage = () => {
             <div>
               <h3 className={`text-lg font-bold mb-4 ${playfair.className}`}>Quick Links</h3>
               <ul className="space-y-2">
-                {['About', 'Services', 'Contact', 'Privacy Policy'].map((item) => (
+                {['About', 'Services', 'Contact'].map((item) => (
                   <li key={item}>
                     <a href="#" className={`text-teal-100 hover:text-white transition-colors duration-200 ${libreBaskerville.className}`}>
                       {item}
