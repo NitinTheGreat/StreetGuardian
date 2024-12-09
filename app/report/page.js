@@ -161,7 +161,7 @@ function ReportPage() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Upload Images (Max 3)</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Upload Images (Max 3)</label>
               <motion.div
                 {...getRootProps()}
                 className={`border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all duration-300 ${
@@ -223,7 +223,7 @@ function ReportPage() {
             )}
 
             <motion.div variants={itemVariants}>
-              <label htmlFor="landmark" className="block text-sm font-medium text-gray-700 mb-2">Nearest Landmark</label>
+              <label htmlFor="landmark" className="block text-sm font-bold text-gray-700 mb-2">Nearest Landmark</label>
               <input
                 id="landmark"
                 type="text"
@@ -235,7 +235,7 @@ function ReportPage() {
             </motion.div>
 
             <motion.div variants={itemVariants}>
-              <label htmlFor="comments" className="block text-sm font-medium text-gray-700 mb-2">Comments</label>
+              <label htmlFor="comments" className="block text-sm font-bold text-gray-700 mb-2">Comments</label>
               <textarea
                 id="comments"
                 value={comments}
@@ -327,4 +327,3 @@ function ReportPage() {
 }
 
 export default ReportPage
-
