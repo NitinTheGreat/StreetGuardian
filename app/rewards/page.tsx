@@ -1,5 +1,5 @@
 'use client'
-// import ProtectedComponent from '@/components/UnifiedProtectedComponent'
+
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
@@ -72,53 +72,52 @@ const RewardsProgram = () => {
     ? rewardItems 
     : rewardItems.filter(item => item.category === selectedCategory)
 
-    const handleRedeem = async (item: typeof rewardItems[0]) => {
-      if (userPoints >= item.points) {
-        try {
-          const token = localStorage.getItem('token')
-          if (!token) {
-            throw new Error('No token found')
-          }
-    
-          const response = await fetch('/api/get-user-rewards', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ points: item.points, rewardType: item.type })
-          })
-    
-          if (response.ok) {
-            const data = await response.json()
-            setUserPoints(data.rewardPoints)
-            const newToast = {
-              id: Date.now(),
-              message: `You've redeemed ${item.type} for ${item.points} points!`
-            }
-            setToasts(prevToasts => [...prevToasts, newToast])
-          } else {
-            const errorData = await response.json()
-            throw new Error(errorData.message || 'Failed to redeem reward')
-          }
-        } catch (error) {
-          console.error('Error redeeming reward:', error)
+  const handleRedeem = async (item: typeof rewardItems[0]) => {
+    if (userPoints >= item.points) {
+      try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+          throw new Error('No token found')
+        }
+
+        const response = await fetch('/api/get-user-rewards', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ points: item.points, rewardType: item.type })
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setUserPoints(data.rewardPoints)
           const newToast = {
             id: Date.now(),
-            message: (error as Error).message
+            message: `You've redeemed ${item.type} for ${item.points} points!`
           }
           setToasts(prevToasts => [...prevToasts, newToast])
+        } else {
+          const errorData = await response.json()
+          throw new Error(errorData.message || 'Failed to redeem reward')
         }
-      } else {
+      } catch (error) {
+        console.error('Error redeeming reward:', error)
         const newToast = {
           id: Date.now(),
-          message: `Not enough points to redeem ${item.type}. Keep earning!`
+          message: (error as Error).message
         }
         setToasts(prevToasts => [...prevToasts, newToast])
-        setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
       }
+    } else {
+      const newToast = {
+        id: Date.now(),
+        message: `Not enough points to redeem ${item.type}. Keep earning!`
+      }
+      setToasts(prevToasts => [...prevToasts, newToast])
+      setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
     }
-    
+  }
 
   if (isLoading) {
     return (
@@ -149,15 +148,19 @@ const RewardsProgram = () => {
           <p className="text-2xl sm:text-4xl text-blue-800 font-bold">{userPoints}</p>
         </motion.div>
 
-        {/* Main Heading */}
+        {/* Glowing Heading */}
         <motion.h1 
-          className="text-4xl sm:text-5xl md:text-6xl font-bold text-center text-white mb-4 sm:mb-8"
+          className="text-4xl sm:text-5xl md:text-6xl font-bold text-center text-white mb-4 sm:mb-8 relative"
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          Unlock Your Rewards
+          <span className="relative z-10 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent animate-pulse">
+            Unlock Your Rewards
+          </span>
+          <span className="absolute inset-0 bg-teal-200 filter blur-lg opacity-50 animate-pulse"></span>
         </motion.h1>
+
         <motion.p 
           className="text-lg sm:text-xl text-center text-white mb-8 sm:mb-12 max-w-3xl mx-auto"
           initial={{ y: 50, opacity: 0 }}
@@ -170,103 +173,64 @@ const RewardsProgram = () => {
 
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-blue-600 hover:bg-blue-100'
-              }`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
+  {categories.map((category) => (
+    <button
+      key={category}
+      onClick={() => setSelectedCategory(category)}
+      className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors transform duration-300 ease-in-out ${
+        selectedCategory === category
+          ? 'bg-blue-600 text-white'
+          : 'bg-white text-blue-600 hover:bg-blue-100'
+      } hover:shadow-lg hover:shadow-blue-500/50 focus:outline-none`}
+    >
+      {category}
+    </button>
+  ))}
+</div>
+
 
         {/* Rewards Section */}
         <div className="bg-white/10 backdrop-blur-md shadow-xl rounded-3xl overflow-hidden p-4 sm:p-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4 sm:mb-6">Available Rewards</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {filteredRewards.map((item, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredRewards.map((item) => (
               <motion.div
                 key={item.type}
-                className="bg-white/10 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
+                className="bg-white/10 backdrop-blur-lg rounded-xl p-6 text-center shadow-lg hover:bg-white/20 transition-all"
+                whileHover={{ scale: 1.05 }}
               >
-                <item.icon className="w-8 h-8 sm:w-12 sm:h-12 text-blue-500 mb-2 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-blue-450 mb-1 sm:mb-2">{item.type}</h3>
-                <p className="text-blue-350 mb-2 sm:mb-4">{item.points} points</p>
-                <button 
-                  className={`w-full ${userPoints >= item.points ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'} text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg`}
+                <item.icon className="text-4xl sm:text-5xl text-blue-500 mb-4" />
+                <h3 className="text-xl font-semibold text-white">{item.type}</h3>
+                <p className="text-sm text-white/70 mb-4">{item.points} Points</p>
+                <button
                   onClick={() => handleRedeem(item)}
-                  disabled={userPoints < item.points}
+                  className="bg-blue-600 text-white py-2 px-4 rounded-lg mt-2 transition-colors hover:bg-blue-500"
                 >
-                  {userPoints >= item.points ? 'Redeem Now' : 'Not Enough Points'}
+                  Redeem
                 </button>
               </motion.div>
             ))}
           </div>
         </div>
-
-        {/* Unique Feature: Point Estimator */}
-        <motion.div 
-          className="mt-8 sm:mt-12 bg-white/10 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-4">Points Estimator</h3>
-          <p className="text-white mb-4">See how long it`&apos;`ll take to earn your next reward!</p>
-          <div className="flex flex-wrap gap-4">
-            <select 
-              className="bg-white text-blue-600 rounded-lg px-3 py-2"
-              onChange={(e) => {
-                const selectedReward = rewardItems.find(item => item.type === e.target.value)
-                if (selectedReward) {
-                  const pointsNeeded = Math.max(0, selectedReward.points - userPoints)
-                  const daysEstimate = Math.ceil(pointsNeeded / 50) // Assuming average 50 points earned per day
-                  const newToast = {
-                    id: Date.now(),
-                    message: `Estimated ${daysEstimate} days to earn ${selectedReward.type}`
-                  }
-                  setToasts(prevToasts => [...prevToasts, newToast])
-                  setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 5000)
-                }
-              }}
-            >
-              <option value="">Select a reward</option>
-              {rewardItems.map(item => (
-                <option key={item.type} value={item.type}>{item.type}</option>
-              ))}
-            </select>
-          </div>
-        </motion.div>
-
-        {/* Toast Notifications */}
-        <div className="fixed bottom-4 right-4 z-50">
-          <AnimatePresence>
-            {toasts.map((toast) => (
-              <motion.div
-                key={toast.id}
-                initial={{ opacity: 0, y: 50, scale: 0.3 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}
-                className="bg-white border-2 border-blue-500 rounded-lg p-4 shadow-lg mb-2"
-              >
-                <p className="text-sm text-gray-800">{toast.message}</p>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
       </div>
+
+      {/* Toast Notifications */}
+      <AnimatePresence>
+        {toasts.map((toast) => (
+          <motion.div
+            key={toast.id}
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 mb-4 bg-teal-500 text-white px-6 py-4 rounded-xl shadow-lg"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          >
+            {toast.message}
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   )
 }
 
-export default RewardsProgram;
+export default RewardsProgram
