@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { MapPin, Upload, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
-import ProtectedRoute from "../../components/ProtectedComponent";
+import ProtectedRoute from "../../components/UnifiedProtectedComponent";
 
 const Map = dynamic(() => import('../../components/MapComponent'), { ssr: false })
 
