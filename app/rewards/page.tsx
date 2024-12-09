@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import { Gift, Award, TrendingUp, Zap, Star, Coffee, Headphones, Ticket, Book } from 'lucide-react'
-
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 const RewardsProgram = () => {
   const [userPoints, setUserPoints] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
@@ -233,4 +233,4 @@ const RewardsProgram = () => {
   )
 }
 
-export default RewardsProgram
+export default ProtectedComponent(RewardsProgram);
