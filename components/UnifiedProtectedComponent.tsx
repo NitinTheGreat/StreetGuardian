@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, ComponentType } from "react";
 
-type ProtectedComponentProps = Record<string, unknown>; // Adjust as needed for your props
+type ProtectedComponentProps = Record<string, unknown>;
 
 export default function ProtectedComponent<T extends ProtectedComponentProps>(
   Component: ComponentType<T>
@@ -35,7 +35,7 @@ export default function ProtectedComponent<T extends ProtectedComponentProps>(
           if (response.ok) {
             setIsAuthorized(true);
           } else {
-            localStorage.removeItem(token ? "token" : "adminToken"); // Remove invalid token
+            localStorage.removeItem(token ? "token" : "adminToken");
             router.push("/login");
           }
         } catch (error) {
@@ -48,7 +48,7 @@ export default function ProtectedComponent<T extends ProtectedComponentProps>(
     }, [router]);
 
     if (!isAuthorized) {
-      return null; // Optionally render a loading indicator
+      return null; // Render nothing or a loading state
     }
 
     return <Component {...props} />;
