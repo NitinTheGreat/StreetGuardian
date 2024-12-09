@@ -1,5 +1,5 @@
 'use client'
-import ProtectedComponent from '@/components/UnifiedProtectedComponent'
+
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu, Activity, Users, Clock } from 'lucide-react'
@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import LocationModal from '../../components/LocationModal'
 
 const MapComponent = dynamic(() => import('../../components/MapComponent'), { ssr: false })
 
@@ -20,16 +21,18 @@ const AdminDashboard = () => {
   const [showModal, setShowModal] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [showUnauthorizedModal, setShowUnauthorizedModal] = useState(false)
+  const [showLocationModal, setShowLocationModal] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState(null)
 
   const router = useRouter()
 
   // Hardcoded data for fallback
   const hardcodedEmergencyData = [
-    { id: 1, text: 'Emergency situation reported at Main St.', type: 'urgent' },
-    { id: 2, text: 'Fire alarm triggered in Building A', type: 'critical' },
-    { id: 3, text: 'Medical assistance needed at Park Ave.', type: 'urgent' },
-    { id: 4, text: 'Security breach detected in Sector 7', type: 'warning' },
-    { id: 5, text: 'Traffic accident reported on Highway 101', type: 'urgent' },
+    { id: 1, description: 'Emergency situation reported at Main St.', severity: 'urgent', serviceType: 'urgent', userLocation: { coordinates: [0, 0] } },
+    { id: 2, description: 'Fire alarm triggered in Building A', severity: 'critical', serviceType: 'urgent', userLocation: { coordinates: [0, 0] } },
+    { id: 3, description: 'Medical assistance needed at Park Ave.', severity: 'urgent', serviceType: 'urgent', userLocation: { coordinates: [0, 0] } },
+    { id: 4, description: 'Security breach detected in Sector 7', severity: 'warning', serviceType: 'urgent', userLocation: { coordinates: [0, 0] } },
+    { id: 5, description: 'Traffic accident reported on Highway 101', severity: 'urgent', serviceType: 'urgent', userLocation: { coordinates: [0, 0] } },
   ]
   const [emergencyData, setEmergencyData] = useState(hardcodedEmergencyData)
 
@@ -52,7 +55,6 @@ const AdminDashboard = () => {
       setEmergencyData(hardcodedEmergencyData) // Fallback to hardcoded data
     }
   }
-
 
   const fetchReportedCasesMap = async () => {
     try {
@@ -115,6 +117,11 @@ const AdminDashboard = () => {
     setShowUnauthorizedModal(false)
   }
 
+  const openLocationModal = (item) => {
+    setSelectedLocation(item.userLocation.coordinates)
+    setShowLocationModal(true)
+  }
+
   return (
     <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br from-cyan-200 to-blue-500 pt-[7vh]">
       <Sheet>
@@ -152,7 +159,7 @@ const AdminDashboard = () => {
                 <CardContent>
                   <ScrollArea className="h-[400px] pr-4">
                     {emergencyData.map((item) => (
-                      <EmergencyCard key={item.id} item={item} />
+                      <EmergencyCard key={item.id} item={item} openLocationModal={openLocationModal} />
                     ))}
                   </ScrollArea>
                 </CardContent>
@@ -215,25 +222,31 @@ const AdminDashboard = () => {
           <UnauthorizedModal closeModal={closeModal} router={router} />
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+        {showLocationModal && selectedLocation && (
+          <LocationModal location={selectedLocation} closeModal={() => setShowLocationModal(false)} />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
-const EmergencyCard = ({ item }) => {
+const EmergencyCard = ({ item, openLocationModal }) => {
   const bgColor = 
-  item.severity === 'critical' ? 'bg-red-100' : 
-  item.severity === 'warning' ? 'bg-yellow-100' : 
-  item.serviceType === 'urgent' ? 'bg-orange-100' : 'bg-green-100';
+    item.severity === 'critical' ? 'bg-red-100' : 
+    item.severity === 'warning' ? 'bg-yellow-100' : 
+    item.serviceType === 'urgent' ? 'bg-orange-100' : 'bg-green-100';
 
-const textColor = 
-  item.severity === 'critical' ? 'text-red-800' : 
-  item.severity === 'warning' ? 'text-yellow-800' : 
-  item.serviceType === 'urgent' ? 'text-orange-800' : 'text-green-800';
+  const textColor = 
+    item.severity === 'critical' ? 'text-red-800' : 
+    item.severity === 'warning' ? 'text-yellow-800' : 
+    item.serviceType === 'urgent' ? 'text-orange-800' : 'text-green-800';
 
-const borderColor = 
-  item.severity === 'critical' ? 'border-red-300' : 
-  item.severity === 'warning' ? 'border-yellow-300' : 
-  item.serviceType === 'urgent' ? 'border-orange-300' : 'border-green-300';
+  const borderColor = 
+    item.severity === 'critical' ? 'border-red-300' : 
+    item.severity === 'warning' ? 'border-yellow-300' : 
+    item.serviceType === 'urgent' ? 'border-orange-300' : 'border-green-300';
 
   return (
     <motion.div
@@ -244,11 +257,7 @@ const borderColor =
     >
       <p className={`${textColor} mb-4`}>{item.description}</p>
       <div className="flex justify-end space-x-2">
-        {/* <Button size="sm" variant="outline" className="rounded-full">
-          <Check className="w-4 h-4 mr-2" />
-          Approve
-        </Button> */}
-        <Button size="sm" variant="outline" className="rounded-full">
+        <Button size="sm" variant="outline" className="rounded-full" onClick={() => openLocationModal(item)}>
           <MapPin className="w-4 h-4 mr-2" />
           Locate
         </Button>
@@ -306,7 +315,7 @@ const CaseDetailsModal = ({ selectedCase, closeModal }) => (
   </motion.div>
 )
 
-const UnauthorizedModal = ({ closeModal, router }) => (
+const UnauthorizedModal = ({ closeModal, router}) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -394,8 +403,5 @@ const StatCard = ({ title, value, change, icon: Icon }) => {
   )
 }
 
-const ProtectedAdminDashboard = ProtectedComponent(AdminDashboard);
+export default AdminDashboard
 
-export default function Page() {
-  return <ProtectedAdminDashboard />;
-}

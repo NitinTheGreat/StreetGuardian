@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Circle, useMap, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -83,7 +83,7 @@ function ChangeView({ center, zoom }) {
   return null;
 }
 
-export default function MapComponent({ locations, location, setLocation, isModal = false }) {
+const MapComponent = ({ locations, location, setLocation, isModal = false }) => {
   const [hotspots, setHotspots] = useState([]);
   const center = location || (locations && locations.length > 0 ? locations[0] : { lat: 20.5937, lng: 78.9629 });
   const zoom = isModal ? 13 : 5;
@@ -101,7 +101,7 @@ export default function MapComponent({ locations, location, setLocation, isModal
 
       {/* Display all individual reported case locations as markers */}
       {locations && locations.map((loc, index) => (
-        loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && ( // Add check here
+        loc && typeof loc.lat === 'number' && typeof loc.lng === 'number' && (
           <Marker key={index} position={loc} />
         )
       ))}
@@ -123,4 +123,7 @@ export default function MapComponent({ locations, location, setLocation, isModal
       {setLocation && <MapEvents setLocation={setLocation} />}
     </MapContainer>
   );
-}
+};
+
+export default MapComponent;
+
