@@ -4,9 +4,13 @@ import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const Map = ({ setUserLocation }) => {
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
+interface MapProps {
+  setUserLocation?: (location: { lat: number; lng: number }) => void;
+}
+
+const Map: React.FC<MapProps> = ({ setUserLocation = () => {} }) => {
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
 
   useEffect(() => {
     if (!mapRef.current) {
@@ -25,7 +29,7 @@ const Map = ({ setUserLocation }) => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             const { latitude, longitude } = position.coords;
-            mapRef.current.setView([latitude, longitude], 13);
+            mapRef.current!.setView([latitude, longitude], 13);
 
             const customIcon = L.icon({
               iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
@@ -40,7 +44,7 @@ const Map = ({ setUserLocation }) => {
               markerRef.current.setLatLng([latitude, longitude]);
             } else {
               markerRef.current = L.marker([latitude, longitude], { icon: customIcon })
-                .addTo(mapRef.current)
+                .addTo(mapRef.current!)
                 .bindPopup('Your location')
                 .openPopup();
             }
@@ -53,7 +57,7 @@ const Map = ({ setUserLocation }) => {
           }
         );
       } else {
-        alert('Geolocation is not supported by your browser');
+        alert('Geolocation is not supported by your browser.');
       }
     }
 
@@ -65,8 +69,7 @@ const Map = ({ setUserLocation }) => {
     };
   }, [setUserLocation]);
 
-  return <div id="map" className="w-full h-full rounded-2xl overflow-hidden" />;
+  return <div id="map" className="w-full h-[400px] rounded-2xl overflow-hidden" />;
 };
 
 export default Map;
-

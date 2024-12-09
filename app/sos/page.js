@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FiAlertCircle, FiMapPin } from 'react-icons/fi';
@@ -46,8 +47,8 @@ export default function SOSPage() {
             severity: selectedSeverity,
             description,
           }),
-          console:log('SOS request:', { location: userLocation, serviceType: selectedService, severity: selectedSeverity, description }),
         });
+        console.log('SOS request:', { location: userLocation, serviceType: selectedService, severity: selectedSeverity, description });
 
         if (response.ok) {
           const result = await response.json();
@@ -188,3 +189,4 @@ export default function SOSPage() {
     </div>
   );
 }
+

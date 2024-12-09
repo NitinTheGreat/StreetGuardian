@@ -1,45 +1,36 @@
-import { NextResponse } from 'next/server';
-import connect from '../../../lib/db';
-import SOS from '../../../lib/models/sos';
+import dbConnect from '../../../lib/db'
+import SOS from '../../../lib/models/sos'
 
-export async function POST(request) {
-  try {
-    const { location, serviceType, severity, description } = await request.json();
+export default async function handler(req, res) {
+  await dbConnect()
 
-    console.log('Received SOS request:', { location, serviceType, severity, description });
+  if (req.method === 'POST') {
+    try {
+      const { location, serviceType, severity, description } = req.body
 
-    await connect();
+      const sosData = new SOS({
+        userLocation: {
+          type: 'Point',
+          coordinates: [location.lat, location.lng] // Note the order: [longitude, latitude]
+        },
+        serviceType,
+        severity,
+        description,
+        // nearestLocation will be populated later, perhaps by a separate process
+        nearestLocation: {
+          type: 'Point',
+          coordinates: [0, 0], // placeholder
+          name: 'Unknown'
+        }
+      })
 
-    const newSOS = new SOS({
-      location,
-      serviceType,
-      severity,
-      description,
-      timestamp: new Date(),
-    });
-    
-
-    await newSOS.save();
-
-    console.log('SOS request saved:', newSOS);
-
-    return NextResponse.json({ message: 'SOS request saved successfully', data: newSOS }, { status: 200 });
-  } catch (error) {
-    console.error('SOS request error:', error);
-    return NextResponse.json({ message: 'Failed to save SOS request' }, { status: 500 });
-  }
-}
-
-export async function GET() {
-  try {
-    await connect();
-
-    const sosRequests = await SOS.find().sort({ timestamp: -1 });
-    console.log('SOS requests:', sosRequests);
-    return NextResponse.json(sosRequests, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching SOS requests:', error);
-    return NextResponse.json({ message: 'Failed to fetch SOS requests' }, { status: 500 });
+      await sosData.save()
+      res.status(201).json({ success: true, data: sosData })
+    } catch (error) {
+      res.status(400).json({ success: false, error: error.message })
+    }
+  } else {
+    res.status(405).json({ success: false, error: 'Method not allowed' })
   }
 }
 
