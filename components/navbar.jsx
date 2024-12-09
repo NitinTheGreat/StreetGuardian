@@ -2,13 +2,15 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useSpring } from 'framer-motion';
-import { Menu, X, Home, AlertTriangle, Award, HelpCircle, UserPlus, LogIn, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Home, AlertTriangle, Award, HelpCircle, UserPlus, LogIn, LogOut, LayoutDashboard } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navRef = useRef(null);
+  const { userToken, adminToken, logout, adminLogout } = useAuth();
 
   const springConfig = { stiffness: 300, damping: 30 };
   const yAnimation = useSpring(0, springConfig);
@@ -34,16 +36,22 @@ const Navbar = () => {
     { name: 'Support', href: '/support', icon: HelpCircle }, 
   ];
 
-  const authItems = [
-    { name: 'Sign Up', href: '/register', icon: UserPlus }, 
-    { name: 'Login', href: '/login', icon: LogIn }, 
-  ];
+  const authItems = userToken
+    ? [{ name: 'Logout', href: '#', icon: LogOut, onClick: logout }]
+    : [
+        { name: 'Sign Up', href: '/register', icon: UserPlus }, 
+        { name: 'Login', href: '/login', icon: LogIn }, 
+      ];
 
-  const adminItems = [
-    { name: 'Admin Dashboard', href: '/admindash', icon: LayoutDashboard }, 
-    { name: 'Admin Login', href: '/adminlogin', icon: LogIn }, 
-    { name: 'Admin Register', href: '/adminregister', icon: UserPlus }, 
-  ];
+  const adminItems = adminToken
+    ? [
+        { name: 'Admin Dashboard', href: '/admindash', icon: LayoutDashboard },
+        { name: 'Logout', href: '#', icon: LogOut, onClick: adminLogout },
+      ]
+    : [
+        { name: 'Admin Login', href: '/adminlogin', icon: LogIn }, 
+        { name: 'Admin Register', href: '/adminregister', icon: UserPlus }, 
+      ];
 
   return (
     <motion.header 
@@ -120,6 +128,7 @@ const NavItem = ({ name, href, icon: Icon }) => (
 const NavDropdown = ({ title, items }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const { userToken, adminToken } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -133,6 +142,13 @@ const NavDropdown = ({ title, items }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const currentItems = title === 'User' 
+    ? (userToken ? [{ name: 'Logout', href: '#', icon: LogOut, onClick: items[0].onClick }] : items)
+    : (adminToken ? [
+        { name: 'Admin Dashboard', href: '/admindash', icon: LayoutDashboard },
+        { name: 'Logout', href: '#', icon: LogOut, onClick: items[1].onClick }
+      ] : items);
 
   return (
     <div className="relative group" ref={dropdownRef}>
@@ -158,7 +174,7 @@ const NavDropdown = ({ title, items }) => {
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}
           >
-            {items.map((item) => (
+            {currentItems.map((item) => (
               <motion.li 
                 key={item.name}
                 whileHover={{ scale: 1.05 }}
@@ -167,9 +183,12 @@ const NavDropdown = ({ title, items }) => {
                 <Link
                   href={item.href}
                   className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-teal-500 hover:text-white transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    item.onClick && item.onClick();
+                  }}
                 >
-                  <item.icon className="mr-3 h-5 w-5 text-gray-400 group-hover:text-white" aria-hidden="true" />
+                  <item.icon className="mr-3 h-5 w-5 text-blue-400 group-hover:text-blue-400" aria-hidden="true" />
                   {item.name}
                 </Link>
               </motion.li>
@@ -199,6 +218,14 @@ const MobileNavItem = ({ name, href, icon: Icon, onClick }) => (
 
 const MobileNavDropdown = ({ title, items, onClick }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { userToken, adminToken } = useAuth();
+
+  const currentItems = title === 'User' 
+    ? (userToken ? [{ name: 'Logout', href: '#', icon: LogOut, onClick: items[0].onClick }] : items)
+    : (adminToken ? [
+        { name: 'Admin Dashboard', href: '/admindash', icon: LayoutDashboard },
+        { name: 'Logout', href: '#', icon: LogOut, onClick: items[1].onClick }
+      ] : items);
 
   return (
     <li>
@@ -220,7 +247,7 @@ const MobileNavDropdown = ({ title, items, onClick }) => {
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="bg-teal-50 rounded-xl mt-1 overflow-hidden"
           >
-            {items.map((item) => (
+            {currentItems.map((item) => (
               <motion.li 
                 key={item.name}
                 whileHover={{ scale: 1.05 }}
@@ -228,10 +255,13 @@ const MobileNavDropdown = ({ title, items, onClick }) => {
               >
                 <Link
                   href={item.href}
-                  className="flex items-center px-8 py-2 text-sm text-teal-600 hover:bg-teal-100 hover:text-teal-800 transition-colors duration-300 rounded-lg"
-                  onClick={onClick}
+                  className="group flex items-center px-8 py-2 text-sm text-teal-600 hover:bg-teal-100 hover:text-teal-800 transition-colors duration-300 rounded-lg"
+                  onClick={() => {
+                    onClick();
+                    item.onClick && item.onClick();
+                  }}
                 >
-                  <item.icon className="mr-3 h-5 w-5" aria-hidden="true" />
+                  <item.icon className="mr-3 h-5 w-5 text-blue-400 group-hover:text-blue-400" aria-hidden="true" />
                   {item.name}
                 </Link>
               </motion.li>
