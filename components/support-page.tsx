@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { X } from 'lucide-react'
+import { X, ChevronDown, ChevronUp } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function SupportPageComponent() {
   const [showMoreFAQ, setShowMoreFAQ] = useState(false)
+  const [expandedFAQ, setExpandedFAQ] = useState<number | null>(null)
 
   const faqItems = [
     {
@@ -40,120 +42,159 @@ export function SupportPageComponent() {
     }
   ]
 
-  return (
-    <div className="min-h-screen bg-gradient-to-r from-teal-200 to-blue-500 p-6 mt-12">
-      <div className="max-w-4xl mx-auto">
+  const toggleFAQ = (index: number) => {
+    setExpandedFAQ(expandedFAQ === index ? null : index)
+  }
 
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-500">StreetGuardian Support</h2>
-          <form className="space-y-4">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-teal-200 via-blue-300 to-blue-500 p-6 pt-16 mt-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="bg-white bg-opacity-90 rounded-2xl shadow-lg p-8 backdrop-blur-sm"
+        >
+          <h2 className="text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-600">
+            StreetGuardian Support
+          </h2>
+          <form className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-bold text-black">Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
               <input 
                 type="text" 
                 id="name" 
                 name="name" 
-                className="mt-1 block w-full rounded-md border-gray-600 shadow-inner focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-gray-100 px-4 py-2" 
-                style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' }}
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200 bg-white bg-opacity-50 backdrop-blur-sm px-4 py-3"
               />
-
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-bold text-black">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
               <input 
                 type="email" 
                 id="email" 
                 name="email" 
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-inner focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-gray-100 px-4 py-2" 
-                style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' }}
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200 bg-white bg-opacity-50 backdrop-blur-sm px-4 py-3"
               />
-
             </div>
             <div>
-              <label htmlFor="issue" className="block text-sm font-bold text-black">Issue</label>
+              <label htmlFor="issue" className="block text-sm font-medium text-gray-700">Issue</label>
               <select 
                 id="issue" 
                 name="issue" 
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-inner focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-gray-100 px-4 py-2" 
-                style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' }}
-                >
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200 bg-white bg-opacity-50 backdrop-blur-sm px-4 py-3"
+              >
                 <option value="">Select an issue</option>
                 <option value="technical">Technical problem</option>
                 <option value="account">Account related</option>
                 <option value="billing">Billing inquiry</option>
                 <option value="other">Other</option>
               </select>
-
             </div>
             <div>
-              <label htmlFor="message" className="block text-sm font-bold text-black">Message</label>
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
               <textarea 
                 id="message" 
                 name="message" 
                 rows={4} 
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-inner focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-gray-100 px-4 py-2" 
-                style={{ boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.5)' }}
-                >
-
-              </textarea>
-
+                className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200 bg-white bg-opacity-50 backdrop-blur-sm px-4 py-3"
+              ></textarea>
             </div>
             <div>
-              <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gradient-to-r from-teal-200 to-blue-500 hover:from-teal-300 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+              <button type="submit" className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-teal-400 to-blue-600 hover:from-teal-500 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
                 Submit
               </button>
             </div>
           </form>
-        </div>
+        </motion.div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-center mb-6 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-500">Frequently Asked Questions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white bg-opacity-90 rounded-2xl shadow-lg p-8 backdrop-blur-sm"
+        >
+          <h2 className="text-3xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-600">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-4">
             {faqItems.map((item, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-4 shadow">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.question}</h3>
-                <p className="text-gray-600">{item.answer}</p>
+              <div key={index} className="bg-gray-50 rounded-lg shadow-sm overflow-hidden">
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full text-left px-6 py-4 flex justify-between items-center focus:outline-none"
+                >
+                  <h3 className="text-lg font-semibold text-gray-800">{item.question}</h3>
+                  {expandedFAQ === index ? <ChevronUp className="text-blue-500" /> : <ChevronDown className="text-gray-500" />}
+                </button>
+                <AnimatePresence>
+                  {expandedFAQ === index && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="px-6 pb-4"
+                    >
+                      <p className="text-gray-600">{item.answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
-          <div className="mt-6 text-center">
+          <div className="mt-8 text-center">
             <button
               onClick={() => setShowMoreFAQ(true)}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-gradient-to-r from-teal-200 to-blue-500 hover:from-teal-300 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-sm font-medium rounded-lg shadow-sm text-white bg-gradient-to-r from-teal-400 to-blue-600 hover:from-teal-500 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
             >
               See More FAQs
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
 
-      {showMoreFAQ && (
-        <div className="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-blue-600">More FAQs</h2>
-              <button
-                onClick={() => setShowMoreFAQ(false)}
-                className="text-gray-500 hover:text-black"
-              >
-                <X size={24} />
-              </button>
-            </div>
-            <div className="space-y-4">
-              {moreFaqItems.map((item, index) => (
-                <div key={index} className="bg-gray-50 rounded-lg p-4 shadow">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.question}</h3>
-                  <p className="text-gray-600">{item.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {showMoreFAQ && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+              className="bg-white rounded-2xl shadow-xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-600">More FAQs</h2>
+                <button
+                  onClick={() => setShowMoreFAQ(false)}
+                  className="text-gray-500 hover:text-black transition duration-200"
+                >
+                  <X size={24} />
+                </button>
+              </div>
+              <div className="space-y-4">
+                {moreFaqItems.map((item, index) => (
+                  <div key={index} className="bg-gray-50 rounded-lg p-4 shadow-sm">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.question}</h3>
+                    <p className="text-gray-600">{item.answer}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <footer className="mt-8 text-center text-white">
-        <p>© 2023 StreetGuardian. All rights reserved.</p>
+      <footer className="mt-12 text-center text-white">
+        <p>© 2024 StreetGuardian. All rights reserved.</p>
       </footer>
     </div>
   )
 }
+
