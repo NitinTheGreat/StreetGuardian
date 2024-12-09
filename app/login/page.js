@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../context/AuthContext';
 
 const inputVariants = {
   focus: { scale: 1.02, transition: { type: 'spring', stiffness: 300 } },
@@ -39,6 +38,17 @@ const childVariants = {
   }
 };
 
+const GlowingHeading = ({ children }) => {
+  return (
+    <h1 className="text-3xl font-bold mb-2 text-center relative">
+      <span className="relative z-10 bg-gradient-to-r from-blue-600 to-teal-600 bg-clip-text text-transparent animate-pulse">
+        {children}
+      </span>
+      <span className="absolute inset-0 bg-blue-200 filter blur-lg opacity-50 animate-pulse"></span>
+    </h1>
+  );
+};
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,13 +56,6 @@ export default function Login() {
   const [messageType, setMessageType] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const { userToken, login } = useAuth();
-
-  useEffect(() => {
-    if (userToken) {
-      router.push('/rewards');
-    }
-  }, [userToken, router]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -73,9 +76,6 @@ export default function Login() {
       const data = await res.json();
 
       if (res.status === 200) {
-        const { token } = data;
-        login(token);  
-
         setMessage('Login successful!');
         setMessageType('success');
         setTimeout(() => {
@@ -99,38 +99,38 @@ export default function Login() {
       animate="visible"
       variants={containerVariants}
     >
-      <div className="max-w-6xl w-full flex rounded-xl overflow-hidden shadow-2xl">
+      <div className="max-w-6xl w-full flex rounded-2xl overflow-hidden shadow-2xl">
         <motion.div 
           className="hidden md:block w-1/2 relative"
           whileHover={{ scale: 1.02 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
-          {/* Image placeholder */}
           <Image
-            src="/images/loginuser.png" 
-            alt="Description of the image"
-            layout='fill'
+            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/ev-IWJH-l-vb4k-unsplash.jpg-ejQIMknTEXHczqRoUpKmOzKPz0dlqL.jpeg"
+            alt="Street scene at night"
+            layout="fill"
+            objectFit="cover"
             priority={true} 
           />
-          <div className="w-full h-full bg-gradient-to-br from-teal-300 to-blue-400"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-300/40 to-blue-400/40 mix-blend-overlay"></div>
         </motion.div>
         <motion.div 
           className="w-full md:w-1/2 bg-white p-8 md:p-10"
           variants={childVariants}
         >
           <motion.div variants={childVariants}>
-            <h1 className="text-3xl font-bold text-blue-600 mb-2">Welcome back</h1>
-            <p className="text-gray-600 mb-6">
-              Log in to access StreetGuardian&apos;s services. Let&apos;s get back to helping the one&apos;s in need.
+            <GlowingHeading>Welcome back</GlowingHeading>
+            <p className="text-gray-600 mb-6 text-center">
+              Log in to access StreetGuardian&apos;s services. Let&apos;s get back to helping those in need.
             </p>
           </motion.div>
 
-          <motion.h2 variants={childVariants} className="text-2xl font-semibold text-blue-600 mb-4">LOGIN</motion.h2>
+          <motion.h2 variants={childVariants} className="text-2xl font-semibold text-blue-600 mb-4 text-center">LOGIN</motion.h2>
 
           {message && (
             <motion.div 
               variants={childVariants}
-              className={`p-3 rounded-md mb-4 ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+              className={`p-3 rounded-xl mb-4 ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
             >
               {message}
             </motion.div>
@@ -148,7 +148,7 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-10 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all duration-200 hover:shadow-md focus:shadow-blue-500/25"
                 />
               </div>
             </motion.div>
@@ -163,7 +163,7 @@ export default function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full px-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-10 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm transition-all duration-200 hover:shadow-md focus:shadow-blue-500/25"
                 />
                 <button
                   type="button"
@@ -176,27 +176,35 @@ export default function Login() {
             </motion.div>
             <div className="flex items-center justify-between mb-6">
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox h-4 w-4 text-blue-600" />
+                <input 
+                  type="checkbox" 
+                  className="form-checkbox h-4 w-4 text-blue-600 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" 
+                />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-500">Forgot Password?</a>
+              <a href="#" className="text-sm text-blue-600 hover:text-blue-500 transition-colors duration-200">Forgot Password?</a>
             </div>
             <motion.button
               type="submit"
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
-              className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="w-full py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25 relative overflow-hidden group"
             >
-              Log In
+              <span className="relative z-10">Log In</span>
+              <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300 ease-in-out"></span>
             </motion.button>
           </motion.form>
 
           <motion.p variants={childVariants} className="mt-6 text-center text-sm text-gray-600">
-            Don&apos;t have an account? <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">Sign up</a>
+            Don&apos;t have an account? {' '}
+            <a href="/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors duration-200">
+              Sign up
+            </a>
           </motion.p>
         </motion.div>
       </div>
     </motion.div>
   );
 }
+
