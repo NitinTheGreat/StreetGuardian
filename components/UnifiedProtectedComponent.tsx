@@ -1,10 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ComponentType } from "react";
 
-export default function ProtectedComponent(Component: any) {
-  return function ProtectedComponentWrapper(props: any) {
+type ProtectedComponentProps = Record<string, unknown>; // Adjust as needed for your props
+
+export default function ProtectedComponent<T extends ProtectedComponentProps>(
+  Component: ComponentType<T>
+) {
+  return function ProtectedComponentWrapper(props: T) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
 

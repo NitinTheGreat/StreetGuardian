@@ -3,10 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, ComponentType } from "react";
 
-interface ProtectedAdminProps {
-  // Define the shape of the props your components will use
-  [key: string]: any; // Replace this with specific prop types if known
-}
+type ProtectedAdminProps = Record<string, unknown>; // Replaces [key: string]: any
 
 export default function ProtectedAdminRoute<T extends ProtectedAdminProps>(
   Component: ComponentType<T>
