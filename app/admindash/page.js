@@ -382,4 +382,8 @@ const StatCard = ({ title, value, change, icon: Icon }) => {
   )
 }
 
-export default ProtectedComponent(AdminDashboard);
+const ProtectedAdminDashboard = ProtectedComponent(AdminDashboard);
+
+export default function Page() {
+  return <ProtectedAdminDashboard />;
+}
