@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle, ArrowDown } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle } from 'lucide-react'
 import { Playfair_Display, Libre_Baskerville } from 'next/font/google'
 
 const playfair = Playfair_Display({ subsets: ['latin'], weight: ['700'] })
@@ -348,9 +348,9 @@ const LandingPage = () => {
             <div>
               <h3 className={`text-lg font-bold mb-4 ${playfair.className}`}>Contact Us</h3>
               <address className={`text-teal-100 not-italic ${libreBaskerville.className}`}>
-                <p>123 Compassion Street</p>
-                <p>Kindness City, KC 12345</p>
-                <p>contact@streetguardian.org</p>
+                <p>Nitin, Mahin, Shambhavi, Srijan</p>
+                <p>Students at VIT, Vellore</p>
+                <p>street.guardian.tech@gmail.com</p>
               </address>
             </div>
             <div>
@@ -365,7 +365,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className={`mt-8 pt-8 border-t border-teal-500 text-center text-teal-100 ${libreBaskerville.className}`}>
-            <p>&copy; {new Date().getFullYear()} StreetGuardian. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} StreetGuardian ©2024. All rights reserved.</p>
           </div>
         </div>
       </footer>
