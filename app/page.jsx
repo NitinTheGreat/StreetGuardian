@@ -279,7 +279,7 @@ const LandingPage = () => {
                   <motion.button
                     whileHover={springAnimation}
                     className="mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
-                    onClick={() => window.location.href= '/RewardsProgram'}
+                    onClick={() => window.location.href = '/RewardsProgram'}
                   >
                     Join Rewards Program
                   </motion.button>
@@ -356,12 +356,23 @@ const LandingPage = () => {
             <div>
               <h3 className={`text-lg font-bold mb-4 ${playfair.className}`}>Follow Us</h3>
               <div className="flex space-x-4">
-                {['Facebook', 'Twitter', 'Instagram', 'LinkedIn'].map((item) => (
-                  <a key={item} href="#" className={`text-teal-100 hover:text-white transition-colors duration-200 ${libreBaskerville.className}`}>
-                    {item}
+                {[
+              
+                  { name: 'Instagram', href: 'https://instagram.com/nexnode01' },
+                  { name: 'LinkedIn', href: 'https://linkedin.com/company/nexnode' },
+                ].map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={`text-teal-100 hover:text-white transition-colors duration-200 ${libreBaskerville.className}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {item.name}
                   </a>
                 ))}
               </div>
+
             </div>
           </div>
           <div className={`mt-8 pt-8 border-t border-teal-500 text-center text-teal-100 ${libreBaskerville.className}`}>
