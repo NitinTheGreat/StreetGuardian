@@ -3,11 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, ComponentType } from "react";
 
-type ProtectedComponentProps = Record<string, unknown>;
+type ProtectedComponentProps = {
+  [key: string]: unknown;
+};
 
 export default function ProtectedComponent<T extends ProtectedComponentProps>(
-  Component: ComponentType<T>
-) {
+  WrappedComponent: ComponentType<T>
+): ComponentType<T> {
   return function ProtectedComponentWrapper(props: T) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -48,9 +50,9 @@ export default function ProtectedComponent<T extends ProtectedComponentProps>(
     }, [router]);
 
     if (!isAuthorized) {
-      return null; // Render nothing or a loading state
+      return null; // Optionally replace with a loading indicator
     }
 
-    return <Component {...props} />;
+    return <WrappedComponent {...props} />;
   };
 }

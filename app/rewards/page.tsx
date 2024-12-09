@@ -1,5 +1,5 @@
 'use client'
-import ProtectedComponent from '@/components/UnifiedProtectedComponent'
+// import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
@@ -269,4 +269,4 @@ const RewardsProgram = () => {
   )
 }
 
-export default ProtectedComponent(RewardsProgram);
+export default RewardsProgram;
