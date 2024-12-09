@@ -1,16 +1,16 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
+ 
 import jwt from 'jsonwebtoken'
 import connect from '../../../lib/db'
 import User from '../../../lib/models/user'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key'
 
-export async function GET(request) {
+export async function GET() {
   try {
     // Connect to MongoDB
     await connect()
-
+    
 
     const token = localStorage.getItem('token')
 

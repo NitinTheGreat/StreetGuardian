@@ -2,7 +2,7 @@
 import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu, Activity, Users, Clock, Shield } from 'lucide-react'
+import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu, Activity, Users, Clock } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"

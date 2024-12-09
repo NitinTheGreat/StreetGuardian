@@ -222,7 +222,7 @@ const RewardsProgram = () => {
           transition={{ delay: 0.8 }}
         >
           <h3 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-4">Points Estimator</h3>
-          <p className="text-white mb-4">See how long it'll take to earn your next reward!</p>
+          <p className="text-white mb-4">See how long it`&apos;`ll take to earn your next reward!</p>
           <div className="flex flex-wrap gap-4">
             <select 
               className="bg-white text-blue-600 rounded-lg px-3 py-2"

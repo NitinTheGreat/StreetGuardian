@@ -1,10 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ComponentType } from "react";
 
-export default function ProtectedAdminRoute(Component: any) {
-  return function ProtectedAdminComponent(props: any) {
+interface ProtectedAdminProps {
+  // Define the shape of the props your components will use
+  [key: string]: any; // Replace this with specific prop types if known
+}
+
+export default function ProtectedAdminRoute<T extends ProtectedAdminProps>(
+  Component: ComponentType<T>
+) {
+  return function ProtectedAdminComponent(props: T) {
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
 

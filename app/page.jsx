@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
-import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle, ArrowDown } from 'lucide-react'
+import { MapPin, Heart, Users, Phone, ChevronDown, Briefcase, Clock, Gift, Star, CheckCircle } from 'lucide-react'
 
 const FadeInEffect = ({ children }) => {
   return (

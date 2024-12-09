@@ -62,6 +62,7 @@ export async function GET(request) {
 
       return NextResponse.json({ message: 'Access granted', admin: decoded }, { status: 200 });
     } catch (error) {
+      console.error('Admin verification error:', error.message);
       return NextResponse.json({ message: 'Invalid or expired token' }, { status: 401 });
     }
   } catch (error) {
