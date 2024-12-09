@@ -261,7 +261,6 @@ const LandingPage = () => {
                       { text: 'Volunteer hours', icon: Clock, points: 100 },
                       { text: 'Donations', icon: Gift, points: 50 },
                       { text: 'Referrals', icon: Users, points: 75 },
-                      { text: 'Community engagement', icon: Heart, points: 25 }
                     ].map((item, index) => (
                       <motion.li
                         key={index}
@@ -279,7 +278,7 @@ const LandingPage = () => {
                   <motion.button
                     whileHover={springAnimation}
                     className="mt-6 bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transition duration-300"
-                    onClick={() => window.location.href = '/RewardsProgram'}
+                    onClick={() => window.location.href = '/rewards'}
                   >
                     Join Rewards Program
                   </motion.button>
