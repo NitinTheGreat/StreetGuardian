@@ -33,7 +33,7 @@ const Navbar = () => {
     { name: 'Home', href: '/', icon: Home }, 
     { name: 'Report', href: '/report', icon: AlertTriangle }, 
     { name: 'Rewards', href: '/rewards', icon: Award }, 
-    { name: 'Support', href: '/support', icon: HelpCircle }, 
+    { name: 'Support', href: '/Support', icon: HelpCircle }, 
   ];
 
   const authItems = userToken
