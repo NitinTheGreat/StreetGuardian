@@ -1,5 +1,5 @@
 import { AuthProvider } from '../context/AuthContext';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/navbar';
 import localFont from "next/font/local";
 import "./globals.css";
 import 'leaflet/dist/leaflet.css';
