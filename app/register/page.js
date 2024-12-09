@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { FiEye, FiEyeOff, FiUser, FiMail, FiLock, FiPhone } from 'react-icons/fi'
 import { motion } from 'framer-motion'
-
+import { useRouter } from 'next/navigation'
 const inputVariants = {
   focus: { scale: 1.02, transition: { type: 'spring', stiffness: 300 } },
   blur: { scale: 1 }
@@ -57,7 +57,16 @@ export default function SignUp() {
   const isEmailValid = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const isPhoneValid = (phone) => /^\d{10}$/.test(phone)
   const isFormValid = password === confirmPassword && isEmailValid(email) && isPhoneValid(phone) && username && password
+  const router = useRouter();
 
+  useEffect(() => {
+ 
+    const token = localStorage.getItem('token');
+    if (token) {
+     
+      router.push('/rewards');
+    }
+  }, [router]);
   const handleSubmit = async (e) => {
     e.preventDefault()
 

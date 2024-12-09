@@ -42,10 +42,10 @@ export default function EnhancedAdminLogin() {
   const [messageType, setMessageType] = useState('');
 
   useEffect(() => {
-    // Check if token exists in localStorage
+ 
     const token = localStorage.getItem('adminToken');
     if (token) {
-      // Redirect to admin dashboard if token exists
+     
       router.push('/admindash');
     }
   }, [router]); // Add router to dependency array
@@ -63,6 +63,9 @@ export default function EnhancedAdminLogin() {
       const data = await res.json();
 
       if (res.status === 200) {
+        if(localStorage.getItem('token')) {
+          localStorage.removeItem('token');
+        }
         localStorage.setItem('adminToken', data.token);
         setMessage('Admin login successful!');
         setMessageType('success');
