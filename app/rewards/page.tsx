@@ -1,5 +1,5 @@
 'use client'
-
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
@@ -66,7 +66,7 @@ const RewardsProgram = () => {
     { type: 'E-book Bundle', points: 600, icon: Book, category: 'Learning' },
   ]
 
-  const categories = ['All', ...new Set(rewardItems.map(item => item.category))]
+  const categories = ['All', ...Array.from(new Set(rewardItems.map(item => item.category)))]
 
   const filteredRewards = selectedCategory === 'All' 
     ? rewardItems 
@@ -105,7 +105,7 @@ const RewardsProgram = () => {
           console.error('Error redeeming reward:', error)
           const newToast = {
             id: Date.now(),
-            message: error.message
+            message: (error as Error).message
           }
           setToasts(prevToasts => [...prevToasts, newToast])
         }
@@ -115,9 +115,8 @@ const RewardsProgram = () => {
           message: `Not enough points to redeem ${item.type}. Keep earning!`
         }
         setToasts(prevToasts => [...prevToasts, newToast])
+        setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
       }
-    
-      setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
     }
     
 
@@ -270,4 +269,4 @@ const RewardsProgram = () => {
   )
 }
 
-export default RewardsProgram
+export default ProtectedComponent(RewardsProgram);

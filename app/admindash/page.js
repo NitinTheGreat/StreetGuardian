@@ -1,5 +1,5 @@
 'use client'
-
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check, MapPin, X, ChevronLeft, ChevronRight, AlertTriangle, Menu, Activity, Users, Clock, Shield } from 'lucide-react'
@@ -382,4 +382,4 @@ const StatCard = ({ title, value, change, icon: Icon }) => {
   )
 }
 
-export default AdminDashboard
+export default ProtectedComponent(AdminDashboard);

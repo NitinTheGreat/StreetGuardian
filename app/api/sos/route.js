@@ -17,6 +17,7 @@ export async function POST(request) {
       description,
       timestamp: new Date(),
     });
+    
 
     await newSOS.save();
 

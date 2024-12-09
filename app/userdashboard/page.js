@@ -1,5 +1,5 @@
 'use client'
-
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
@@ -108,3 +108,4 @@ export default function Dashboard() {
     </div>
   )
 }
+Dashboard.Layout = ProtectedComponent;

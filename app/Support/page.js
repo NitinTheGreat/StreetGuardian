@@ -1,7 +1,7 @@
 // import { Navbar } from "@/components/navbar";
 import {SupportPageComponent} from "../../components/support-page";
 import React from 'react'
-
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 const Support = () => {
   return (
     <>
@@ -11,4 +11,4 @@ const Support = () => {
   )
 }
 
-export default Support
+export default ProtectedComponent(Support);

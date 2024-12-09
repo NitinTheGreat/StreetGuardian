@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { MapPin, Upload, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
+import ProtectedRoute from "../../components/ProtectedComponent";
 
 const Map = dynamic(() => import('../../components/MapComponent'), { ssr: false })
 
@@ -287,4 +288,4 @@ function ReportPage() {
     </div>
   )
 }
-export default ReportPage
+export default ProtectedRoute(ReportPage);
