@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { motion, useAnimation, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Confetti from 'react-confetti'
@@ -121,15 +122,17 @@ const LandingPage = () => {
                 whileHover={springAnimation}
                 className="w-full sm:w-auto bg-gradient-to-r from-teal-600 to-blue-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition duration-300 relative overflow-hidden group"
               >
-                <span className="relative z-10">Get Started</span>
+              <Link href="/login">
+  <span className="relative z-10">Get Started</span>
+</Link>
                 <span className="absolute inset-0 bg-white opacity-25 group-hover:animate-pulse"></span>
               </motion.button>
-              <motion.button
+              {/* <motion.button
                 whileHover={springAnimation}
                 className="w-full sm:w-auto border-2 border-teal-600 text-teal-600 font-semibold py-3 px-8 rounded-full hover:bg-teal-600 hover:text-white transition duration-300"
               >
                 Learn More
-              </motion.button>
+              </motion.button> */}
             </div>
           </div>
           <motion.div
