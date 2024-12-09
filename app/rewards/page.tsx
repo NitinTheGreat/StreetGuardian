@@ -72,24 +72,54 @@ const RewardsProgram = () => {
     ? rewardItems 
     : rewardItems.filter(item => item.category === selectedCategory)
 
-  const handleRedeem = (item: typeof rewardItems[0]) => {
-    if (userPoints >= item.points) {
-      setUserPoints(prevPoints => prevPoints - item.points)
-      const newToast = {
-        id: Date.now(),
-        message: `You've redeemed ${item.type} for ${item.points} points!`
+    const handleRedeem = async (item: typeof rewardItems[0]) => {
+      if (userPoints >= item.points) {
+        try {
+          const token = localStorage.getItem('token')
+          if (!token) {
+            throw new Error('No token found')
+          }
+    
+          const response = await fetch('/api/get-user-rewards', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ points: item.points, rewardType: item.type })
+          })
+    
+          if (response.ok) {
+            const data = await response.json()
+            setUserPoints(data.rewardPoints)
+            const newToast = {
+              id: Date.now(),
+              message: `You've redeemed ${item.type} for ${item.points} points!`
+            }
+            setToasts(prevToasts => [...prevToasts, newToast])
+          } else {
+            const errorData = await response.json()
+            throw new Error(errorData.message || 'Failed to redeem reward')
+          }
+        } catch (error) {
+          console.error('Error redeeming reward:', error)
+          const newToast = {
+            id: Date.now(),
+            message: error.message
+          }
+          setToasts(prevToasts => [...prevToasts, newToast])
+        }
+      } else {
+        const newToast = {
+          id: Date.now(),
+          message: `Not enough points to redeem ${item.type}. Keep earning!`
+        }
+        setToasts(prevToasts => [...prevToasts, newToast])
       }
-      setToasts(prevToasts => [...prevToasts, newToast])
-      setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
-    } else {
-      const newToast = {
-        id: Date.now(),
-        message: `Not enough points to redeem ${item.type}. Keep earning!`
-      }
-      setToasts(prevToasts => [...prevToasts, newToast])
+    
       setTimeout(() => setToasts(prevToasts => prevToasts.filter(toast => toast.id !== newToast.id)), 3000)
     }
-  }
+    
 
   if (isLoading) {
     return (
@@ -163,16 +193,16 @@ const RewardsProgram = () => {
             {filteredRewards.map((item, index) => (
               <motion.div
                 key={item.type}
-                className="bg-white/20 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg"
+                className="bg-white/10 backdrop-blur-md p-4 sm:p-6 rounded-2xl shadow-lg"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <item.icon className="w-8 h-8 sm:w-12 sm:h-12 text-white mb-2 sm:mb-4" />
-                <h3 className="text-lg sm:text-xl font-semibold text-white mb-1 sm:mb-2">{item.type}</h3>
-                <p className="text-blue-200 mb-2 sm:mb-4">{item.points} points</p>
+                <item.icon className="w-8 h-8 sm:w-12 sm:h-12 text-blue-500 mb-2 sm:mb-4" />
+                <h3 className="text-lg sm:text-xl font-semibold text-blue-450 mb-1 sm:mb-2">{item.type}</h3>
+                <p className="text-blue-350 mb-2 sm:mb-4">{item.points} points</p>
                 <button 
                   className={`w-full ${userPoints >= item.points ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400 cursor-not-allowed'} text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg`}
                   onClick={() => handleRedeem(item)}

@@ -26,6 +26,7 @@ const connectDB = async () => {
   await mongoose.connect(MONGODB_URI)
 }
 
+// GET handler for fetching user rewards
 export async function GET(request: NextRequest) {
   try {
     const token = request.headers.get('Authorization')?.split(' ')[1]
@@ -49,3 +50,34 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// POST handler for redeeming points
+export async function POST(request: NextRequest) {
+  try {
+    const token = request.headers.get('Authorization')?.split(' ')[1]
+    const { points, rewardType } = await request.json()
+
+    if (!token) {
+      return NextResponse.json({ message: 'No token provided' }, { status: 401 })
+    }
+
+    const decoded = jwt.verify(token, JWT_SECRET) as { userId: string }
+    await connectDB()
+
+    const user = await User.findById(decoded.userId)
+    if (!user) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 })
+    }
+
+    if (user.rewardPoints < points) {
+      return NextResponse.json({ message: 'Insufficient points' }, { status: 400 })
+    }
+
+    user.rewardPoints -= points
+    await user.save()
+
+    return NextResponse.json({ message: `Redeemed ${rewardType} successfully`, rewardPoints: user.rewardPoints }, { status: 200 })
+  } catch (error) {
+    console.error('Error redeeming reward:', error)
+    return NextResponse.json({ message: 'Failed to redeem reward' }, { status: 500 })
+  }
+}
