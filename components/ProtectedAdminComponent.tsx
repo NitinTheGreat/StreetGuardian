@@ -26,6 +26,7 @@ export default function ProtectedAdminRoute(Component: any) {
           });
 
           if (response.ok) {
+            router.push("/admindash");
             setIsAuthorized(true);
           } else {
             localStorage.removeItem("adminToken"); // Remove invalid token

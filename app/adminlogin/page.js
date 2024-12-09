@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useRouter } from 'next/navigation' // Import the useRouter hook
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -33,38 +34,49 @@ const BackgroundShapes = () => (
 )
 
 export default function EnhancedAdminLogin() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [message, setMessage] = useState('')
-  const [messageType, setMessageType] = useState('')
+  const router = useRouter(); // Initialize useRouter
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+
+  useEffect(() => {
+    // Check if token exists in localStorage
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      // Redirect to admin dashboard if token exists
+      router.push('/admindash');
+    }
+  }, [router]); // Add router to dependency array
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     
     try {
       const res = await fetch('/api/admin-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
-      })
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (res.status === 200) {
-        localStorage.setItem('adminToken', data.token)
-        setMessage('Admin login successful!')
-        setMessageType('success')
+        localStorage.setItem('adminToken', data.token);
+        setMessage('Admin login successful!');
+        setMessageType('success');
+        router.push('/admindash'); // Redirect after successful login
       } else {
-        setMessage(data.message || 'Login failed. Please try again.')
-        setMessageType('error')
+        setMessage(data.message || 'Login failed. Please try again.');
+        setMessageType('error');
       }
     } catch (error) {
-      console.error('Login error:', error)
-      setMessage('An error occurred during login.')
-      setMessageType('error')
+      console.error('Login error:', error);
+      setMessage('An error occurred during login.');
+      setMessageType('error');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center mt-14 bg-gradient-to-br from-[#01579b] via-[#0277bd] to-[#e0f2f1] relative overflow-hidden">
