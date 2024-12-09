@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../context/AuthContext';
 
 const inputVariants = {
   focus: { scale: 1.02, transition: { type: 'spring', stiffness: 300 } },
@@ -43,6 +45,14 @@ export default function Login() {
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  const { userToken, login } = useAuth();
+
+  useEffect(() => {
+    if (userToken) {
+      router.push('/rewards');
+    }
+  }, [userToken, router]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -64,11 +74,13 @@ export default function Login() {
 
       if (res.status === 200) {
         const { token } = data;
-        localStorage.setItem('token', token);  
+        login(token);  
 
         setMessage('Login successful!');
         setMessageType('success');
-        
+        setTimeout(() => {
+          router.push('/rewards');
+        }, 2000);
       } else {
         setMessage(data.message || 'Login failed. Please try again.');
         setMessageType('error');
@@ -95,11 +107,11 @@ export default function Login() {
         >
           {/* Image placeholder */}
           <Image
-        src="/images/loginuser.png" 
-        alt="Description of the image"
-        layout='fill'
-        priority={true} 
-      />
+            src="/images/loginuser.png" 
+            alt="Description of the image"
+            layout='fill'
+            priority={true} 
+          />
           <div className="w-full h-full bg-gradient-to-br from-teal-300 to-blue-400"></div>
         </motion.div>
         <motion.div 

@@ -1,15 +1,41 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
-import { Clock, Heart, Users, Gift } from 'lucide-react'
+import { Heart, Users, Gift } from 'lucide-react'
 
 const RewardsProgram = () => {
+  const [userPoints, setUserPoints] = useState(0)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchUserPoints()
+  }, [])
+
+  const fetchUserPoints = async () => {
+    try {
+      setIsLoading(true)
+      const response = await fetch('/api/get-user-points')
+      if (response.ok) {
+        const data = await response.json()
+        setUserPoints(data.points)
+        setError(null)
+      } else {
+        throw new Error('Failed to fetch user points')
+      }
+    } catch (error) {
+      console.error('Error fetching user points:', error)
+      setError('Failed to fetch user points. Please try again later.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const contributionCategories = [
-    { icon: Clock, title: "Volunteer Hours", value: "120 hours" },
     { icon: Heart, title: "Donations", value: "$1,500" },
     { icon: Users, title: "Referrals", value: "15 people" },
     { icon: Gift, title: "Community Engagement", value: "45 events" },
@@ -20,13 +46,28 @@ const RewardsProgram = () => {
     ...Array(10).fill(null).map((_, i) => ({ type: 'GiftCard', id: i + 1 })),
   ]
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500">
+        <div className="text-2xl font-bold text-white">Loading...</div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-cyan-200 to-blue-500 p-8">
       <div className="max-w-7xl mx-auto">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong className="font-bold">Error: </strong>
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+
         {/* Points Display */}
         <div className="absolute top-4 right-4 bg-white rounded-full p-4 shadow-lg mt-12">
           <p className="text-blue-600 font-bold">Your Points</p>
-          <p className="text-3xl text-blue-800 font-bold">5,280</p>
+          <p className="text-3xl text-blue-800 font-bold">{userPoints}</p>
         </div>
 
         {/* Main Heading */}
@@ -40,7 +81,7 @@ const RewardsProgram = () => {
         </p>
 
         {/* Contribution Categories */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-12">
           {contributionCategories.map((category, index) => (
             <Card key={index} className="bg-white shadow-lg">
               <CardContent className="flex flex-col items-center p-6">

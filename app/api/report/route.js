@@ -1,4 +1,3 @@
-// app/api/report/route.js
 import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connect from '../../../lib/db';
@@ -40,7 +39,7 @@ export async function POST(request) {
     }
 
     // Extract latitude and longitude from the location (assuming it's structured)
-    const { lat, lng} = location;
+    const { lat, lng } = location;
 
     // Define the file path for the CSV file
     const csvDirectory = path.join(process.cwd(), 'reports');
@@ -69,3 +68,4 @@ export async function POST(request) {
     return NextResponse.json({ message: 'Report submission failed' }, { status: 500 });
   }
 }
+

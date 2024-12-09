@@ -1,28 +1,30 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation'; // Import the useRouter hook
+import { useAuth } from '../../context/AuthContext'; // Import the AuthContext
 
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
-    transition: { 
-      when: "beforeChildren",
+    transition: {
+      when: 'beforeChildren',
       staggerChildren: 0.1,
-      duration: 0.5
-    }
-  }
-}
+      duration: 0.5,
+    },
+  },
+};
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
-  visible: { 
-    y: 0, 
+  visible: {
+    y: 0,
     opacity: 1,
-    transition: { type: 'spring', stiffness: 300, damping: 24 }
-  }
-}
+    transition: { type: 'spring', stiffness: 300, damping: 24 },
+  },
+};
 
 const BackgroundShapes = () => (
   <>
@@ -30,41 +32,50 @@ const BackgroundShapes = () => (
     <div className="absolute bottom-20 right-20 w-60 h-60 rounded-full bg-[#0277bd] opacity-30 blur-xl"></div>
     <div className="absolute top-1/2 left-1/4 w-0 h-0 border-l-[50px] border-l-transparent border-b-[100px] border-b-[#01579b] border-r-[50px] border-r-transparent opacity-20 blur-sm"></div>
   </>
-)
+);
 
 export default function EnhancedAdminLogin() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [message, setMessage] = useState('')
-  const [messageType, setMessageType] = useState('')
+  const router = useRouter(); // Initialize useRouter
+  const { adminToken, adminLogin } = useAuth(); // Use AuthContext
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('');
+
+  useEffect(() => {
+    if (adminToken) {
+      router.push('/admindash');
+    }
+  }, [adminToken, router]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     try {
       const res = await fetch('/api/admin-login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
+        body: JSON.stringify({ username, password }),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
       if (res.status === 200) {
-        localStorage.setItem('adminToken', data.token)
-        setMessage('Admin login successful!')
-        setMessageType('success')
+        adminLogin(data.token); // Use adminLogin from context
+        setMessage('Admin login successful!');
+        setMessageType('success');
+        router.push('/admindash');
       } else {
-        setMessage(data.message || 'Login failed. Please try again.')
-        setMessageType('error')
+        setMessage(data.message || 'Login failed. Please try again.');
+        setMessageType('error');
       }
     } catch (error) {
-      console.error('Login error:', error)
-      setMessage('An error occurred during login.')
-      setMessageType('error')
+      console.error('Login error:', error);
+      setMessage('An error occurred during login.');
+      setMessageType('error');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center mt-14 bg-gradient-to-br from-[#01579b] via-[#0277bd] to-[#e0f2f1] relative overflow-hidden">
@@ -75,7 +86,7 @@ export default function EnhancedAdminLogin() {
         animate="visible"
         variants={containerVariants}
       >
-        <motion.h2 
+        <motion.h2
           className="text-3xl font-bold text-center text-[#01579b] mb-6"
           variants={itemVariants}
         >
@@ -103,7 +114,7 @@ export default function EnhancedAdminLogin() {
             <div className="relative">
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 required
                 className="w-full px-3 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#0277bd]"
                 value={password}
@@ -129,7 +140,7 @@ export default function EnhancedAdminLogin() {
             </div>
           </motion.div>
           {message && (
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className={`p-3 rounded-full ${messageType === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
             >
@@ -151,5 +162,5 @@ export default function EnhancedAdminLogin() {
         </motion.p>
       </motion.div>
     </div>
-  )
+  );
 }

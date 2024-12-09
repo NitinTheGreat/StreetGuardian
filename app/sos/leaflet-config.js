@@ -7,3 +7,4 @@ L.Icon.Default.mergeOptions({
   iconUrl: '/marker-icon.png',
   shadowUrl: '/marker-shadow.png',
 });
+

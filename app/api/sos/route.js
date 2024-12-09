@@ -1,26 +1,54 @@
-import { NextResponse } from 'next/server'
-import connect from '../../../lib/db'
-import SOS from '../../../lib/models/sos'
+import dbConnect from '../../../lib/db'; // Assumes you have a dbConnect utility to manage your MongoDB connection
+import SOS from '../../../lib/models/sos'; // Your mongoose SOS model
+import { NextResponse } from 'next/server';
 
-export async function POST(request) {
+// Handle POST requests
+export async function POST(req) {
   try {
-    const { userLocation, nearestLocation, serviceType, description } = await request.json()
+    await dbConnect();
 
-    await connect()
+    const body = await req.json(); // Parse JSON from the request body
+    const { location, serviceType, severity, description } = body;
 
-    const newSOS = new SOS({
-      userLocation,
-      nearestLocation,
+    // Create a new SOS document
+    const sosData = new SOS({
+      userLocation: {
+        type: 'Point',
+        coordinates: [location.lng, location.lat], // Longitude, Latitude order
+      },
       serviceType,
+      severity,
       description,
-      timestamp: new Date(),
-    })
+      nearestLocation: {
+        type: 'Point',
+        coordinates: [0, 0], // Placeholder for now
+        name: 'Unknown',
+      },
+    });
 
-    await newSOS.save()
+    await sosData.save(); // Save to the database
 
-    return NextResponse.json({ message: 'SOS request saved successfully' }, { status: 200 })
+    return NextResponse.json({ success: true, data: sosData }, { status: 201 });
   } catch (error) {
-    console.error('SOS request error:', error)
-    return NextResponse.json({ message: 'Failed to save SOS request' }, { status: 500 })
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 400 }
+    );
+  }
+}
+
+// Handle GET requests
+export async function GET() {
+  try {
+    await dbConnect();
+
+    const sosRecords = await SOS.find(); // Fetch all SOS records from the database
+
+    return NextResponse.json({ success: true, data: sosRecords }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

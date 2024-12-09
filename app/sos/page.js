@@ -2,102 +2,39 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FiAlertCircle, FiMapPin } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
-import { FiMapPin, FiPhone, FiAlertCircle } from 'react-icons/fi';
 
 // Dynamically import the Map component with no SSR
 const Map = dynamic(() => import('./Map'), { ssr: false });
 
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: { 
-      type: 'spring',
-      stiffness: 100,
-      damping: 15,
-      staggerChildren: 0.07
-    }
-  }
-};
-
-const childVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0,
-    transition: { type: 'spring', stiffness: 200, damping: 20 }
-  }
-};
-
-const buttonVariants = {
-  hover: { scale: 1.05, transition: { type: 'spring', stiffness: 400 } },
-  tap: { scale: 0.95 }
-};
-
-// Custom hook for getting user's location
-const useGeoLocation = () => {
-  const [location, setLocation] = useState(null);
+export default function SOSPage() {
+  const [selectedService, setSelectedService] = useState('hospital');
+  const [selectedSeverity, setSelectedSeverity] = useState('warning');
+  const [description, setDescription] = useState('');
+  const [userLocation, setUserLocation] = useState(null);
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && navigator.geolocation) {
+    if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
+          setUserLocation({
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           });
         },
         (error) => {
-          console.error("Error getting location:", error);
+          console.error('Error getting location:', error);
+          alert('Unable to retrieve your location. Please check your browser settings and try again.');
         }
       );
+    } else {
+      alert('Geolocation is not supported by your browser');
     }
   }, []);
 
-  return location;
-};
-
-export default function Component() {
-  const [selectedService, setSelectedService] = useState('hospital');
-  const [nearestLocation, setNearestLocation] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [description, setDescription] = useState('');
-  const userLocation = useGeoLocation();
-
-  useEffect(() => {
-    if (userLocation) {
-      fetchNearestLocation();
-    }
-  }, [userLocation, selectedService]);
-
-  const fetchNearestLocation = async () => {
-    if (!userLocation) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch(`/api/nearest?lat=${userLocation.lat}&lon=${userLocation.lng}&type=${selectedService}`);
-      if (!response.ok) throw new Error('Failed to fetch nearest location');
-      const data = await response.json();
-      setNearestLocation({
-        lat: data.lat,
-        lng: data.lon,
-        name: data.name,
-      });
-    } catch (err) {
-      console.error('Error fetching nearest location:', err);
-      setError('Failed to fetch nearest location. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleSOSSubmit = async () => {
-    if (userLocation && nearestLocation) {
+    if (userLocation) {
       try {
         const response = await fetch('/api/sos', {
           method: 'POST',
@@ -105,16 +42,19 @@ export default function Component() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userLocation,
-            nearestLocation,
+            location: userLocation,
             serviceType: selectedService,
+            severity: selectedSeverity,
             description,
           }),
         });
+        console.log('SOS request:', { location: userLocation, serviceType: selectedService, severity: selectedSeverity, description });
 
         if (response.ok) {
-          alert('SOS request submitted successfully!');
+          const result = await response.json();
+          console.log('SOS request submitted:', result);
           setDescription('');
+          alert('SOS request submitted successfully!');
         } else {
           throw new Error('Failed to submit SOS request');
         }
@@ -122,109 +62,131 @@ export default function Component() {
         console.error('Error submitting SOS request:', error);
         alert('An error occurred. Please try again.');
       }
+    } else {
+      alert('Unable to determine your location. Please ensure location services are enabled.');
     }
   };
 
   return (
-    <motion.div 
-      className="min-h-screen bg-gradient-to-br from-teal-200 to-blue-500 py-12 px-4 sm:px-6 lg:px-8"
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-    >
+    <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br from-teal-200 to-blue-500 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <motion.div 
-        className="max-w-7xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden"
-        variants={childVariants}
+        className="max-w-7xl mx-auto bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
-          <motion.div variants={childVariants} className="space-y-6">
-            <h1 className="text-3xl font-bold text-blue-600">SOS Emergency Assistance</h1>
-            <p className="text-gray-600">
-              Use this service to quickly locate and contact the nearest hospital or police station in case of an emergency.
-            </p>
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-blue-600">Select Service</h2>
-              <div className="flex space-x-4">
-                <motion.button
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                  className={`py-2 px-4 rounded-md ${selectedService === 'hospital' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                  onClick={() => setSelectedService('hospital')}
-                >
-                  Hospital
-                </motion.button>
-                <motion.button
-                  variants={buttonVariants}
-                  whileHover="hover"
-                  whileTap="tap"
-                  className={`py-2 px-4 rounded-md ${selectedService === 'police' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                  onClick={() => setSelectedService('police')}
-                >
-                  Police Station
-                </motion.button>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+          <div className="space-y-8">
+            <motion.h1 
+              className="text-5xl font-extrabold text-white text-center lg:text-left"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              SOS Emergency
+            </motion.h1>
+            <motion.p 
+              className="text-xl text-white text-center lg:text-left"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Quick help when you need it most. Stay safe, stay connected.
+            </motion.p>
+            <motion.div 
+              className="space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              <h2 className="text-2xl font-semibold text-white">Choose Service</h2>
+              <div className="flex flex-wrap gap-4">
+                {['hospital', 'police', 'fire', 'ambulance'].map((service) => (
+                  <motion.button
+                    key={service}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`py-2 px-6 rounded-full text-lg font-medium transition-colors duration-200 ${
+                      selectedService === service 
+                        ? 'bg-white text-blue-600' 
+                        : 'bg-blue-600 bg-opacity-50 text-white hover:bg-opacity-75'
+                    }`}
+                    onClick={() => setSelectedService(service)}
+                  >
+                    {service.charAt(0).toUpperCase() + service.slice(1)}
+                  </motion.button>
+                ))}
               </div>
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-xl font-semibold text-blue-600">Emergency Contact Numbers</h2>
-              <ul className="space-y-2">
-                <li className="flex items-center">
-                  <FiPhone className="mr-2 text-blue-600" />
-                  <span>Police: 100</span>
-                </li>
-                <li className="flex items-center">
-                  <FiPhone className="mr-2 text-blue-600" />
-                  <span>Ambulance: 102</span>
-                </li>
-                <li className="flex items-center">
-                  <FiPhone className="mr-2 text-blue-600" />
-                  <span>Fire: 101</span>
-                </li>
-                <li className="flex items-center">
-                  <FiPhone className="mr-2 text-blue-600" />
-                  <span>Women Helpline: 1091</span>
-                </li>
-              </ul>
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-blue-600">Describe Your Emergency</h2>
+            </motion.div>
+            <motion.div 
+              className="space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              <h2 className="text-2xl font-semibold text-white">Emergency Level</h2>
+              <div className="flex flex-wrap gap-4">
+                {['urgent', 'critical', 'warning'].map((severity) => (
+                  <motion.button
+                    key={severity}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`py-2 px-6 rounded-full text-lg font-medium transition-colors duration-200 ${
+                      selectedSeverity === severity 
+                        ? 'bg-white text-blue-600' 
+                        : 'bg-blue-600 bg-opacity-50 text-white hover:bg-opacity-75'
+                    }`}
+                    onClick={() => setSelectedSeverity(severity)}
+                  >
+                    {severity.charAt(0).toUpperCase() + severity.slice(1)}
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+            <motion.div 
+              className="space-y-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              <h2 className="text-2xl font-semibold text-white">Describe Your Emergency</h2>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 text-blue-800 bg-white bg-opacity-75 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-opacity-100 transition-all duration-200"
                 rows="4"
                 placeholder="Please briefly describe your emergency..."
               ></textarea>
-            </div>
+            </motion.div>
             <motion.button
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              className="w-full py-2 px-4 bg-red-600 text-white rounded-md shadow-md flex items-center justify-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-full py-4 px-6 bg-red-500 text-white rounded-full shadow-lg flex items-center justify-center text-xl font-bold transition-colors duration-200 hover:bg-red-600"
               onClick={handleSOSSubmit}
-              disabled={!nearestLocation || isLoading || !description.trim()}
+              disabled={!userLocation || !description.trim()}
             >
               <FiAlertCircle className="mr-2" />
               Send SOS Alert
             </motion.button>
-          </motion.div>
-          <motion.div variants={childVariants} className="h-[600px] relative">
+          </div>
+          <motion.div 
+            className="h-[calc(100vh-15vh)] lg:h-auto relative rounded-2xl overflow-hidden shadow-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7 }}
+          >
             {userLocation ? (
-              <Map userLocation={userLocation} nearestLocation={nearestLocation} />
+              <Map userLocation={userLocation} />
             ) : (
-              <div className="h-full flex items-center justify-center bg-gray-100 rounded-lg">
-                <FiMapPin className="text-4xl text-gray-400 animate-bounce" />
-                <p className="ml-2 text-gray-600">Loading map...</p>
-              </div>
-            )}
-            {error && (
-              <div className="absolute inset-0 flex items-center justify-center bg-red-100 bg-opacity-75 rounded-lg">
-                <p className="text-red-600">{error}</p>
+              <div className="h-full flex items-center justify-center bg-blue-100 bg-opacity-50">
+                <FiMapPin className="text-6xl text-blue-600 animate-bounce" />
+                <p className="ml-4 text-2xl font-semibold text-blue-800">Locating you...</p>
               </div>
             )}
           </motion.div>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
+

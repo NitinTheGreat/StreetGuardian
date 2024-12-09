@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-
+import { useRouter } from 'next/navigation'
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { 
@@ -40,6 +40,15 @@ export default function EnhancedAdminRegister() {
   const [showPassword, setShowPassword] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState('')
+  const router = useRouter()
+  useEffect(() => {
+ 
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+     
+      router.push('/admindash');
+    }
+  }, [router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
