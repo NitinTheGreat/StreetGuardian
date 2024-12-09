@@ -69,7 +69,7 @@ const Map: React.FC<MapProps> = ({ setUserLocation = () => {} }) => {
     };
   }, [setUserLocation]);
 
-  return <div id="map" className="w-full h-[400px] rounded-2xl overflow-hidden" />;
+  return <div id="map" className="w-full h-full rounded-2xl overflow-hidden" />;
 };
 
 export default Map;
