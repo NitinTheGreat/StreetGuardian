@@ -45,7 +45,8 @@ const AdminDashboard = () => {
       const response = await fetch('/api/sos')
       if (!response.ok) throw new Error('Failed to fetch data')
       const data = await response.json()
-      setEmergencyData(data)
+      setEmergencyData(data.data)
+      console.log('SOS cases:', data.data)
     } catch (error) {
       console.error('Error fetching SOS cases:', error)
       setEmergencyData(hardcodedEmergencyData) // Fallback to hardcoded data
@@ -219,9 +220,20 @@ const AdminDashboard = () => {
 }
 
 const EmergencyCard = ({ item }) => {
-  const bgColor = item.type === 'critical' ? 'bg-red-100' : item.type === 'urgent' ? 'bg-orange-100' : 'bg-yellow-100'
-  const textColor = item.type === 'critical' ? 'text-red-800' : item.type === 'urgent' ? 'text-orange-800' : 'text-yellow-800'
-  const borderColor = item.type === 'critical' ? 'border-red-300' : item.type === 'urgent' ? 'border-orange-300' : 'border-yellow-300'
+  const bgColor = 
+  item.severity === 'critical' ? 'bg-red-100' : 
+  item.severity === 'warning' ? 'bg-yellow-100' : 
+  item.serviceType === 'urgent' ? 'bg-orange-100' : 'bg-green-100';
+
+const textColor = 
+  item.severity === 'critical' ? 'text-red-800' : 
+  item.severity === 'warning' ? 'text-yellow-800' : 
+  item.serviceType === 'urgent' ? 'text-orange-800' : 'text-green-800';
+
+const borderColor = 
+  item.severity === 'critical' ? 'border-red-300' : 
+  item.severity === 'warning' ? 'border-yellow-300' : 
+  item.serviceType === 'urgent' ? 'border-orange-300' : 'border-green-300';
 
   return (
     <motion.div
@@ -230,7 +242,7 @@ const EmergencyCard = ({ item }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: item.id * 0.1 }}
     >
-      <p className={`${textColor} mb-4`}>{item.text}</p>
+      <p className={`${textColor} mb-4`}>{item.description}</p>
       <div className="flex justify-end space-x-2">
         {/* <Button size="sm" variant="outline" className="rounded-full">
           <Check className="w-4 h-4 mr-2" />
