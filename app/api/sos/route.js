@@ -34,9 +34,3 @@ export async function POST(req) {
     );
   }
 }
-
-export async function OPTIONS() {
-  return NextResponse.json({ success: true }, { status: 200 });
-}
-
-export const runtime = 'edge'; // Optional: To use Edge Runtime for faster responses
