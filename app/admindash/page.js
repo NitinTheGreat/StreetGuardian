@@ -141,7 +141,7 @@ const AdminDashboard = () => {
       </Sheet>
 
       <main className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-white mb-8 text-center">Crisis Command Center</h1>
+        <h1 className="text-4xl font-bold text-white mb-8 text-center">Dashboard</h1>
         
         <Tabs defaultValue="overview" className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
