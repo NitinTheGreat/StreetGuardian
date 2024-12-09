@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, ComponentType } from "react";
 
-type ProtectedRouteProps = {}; // Define specific shared props if applicable.
+// Replace `ProtectedRouteProps` with a specific type or generic definition
+type ProtectedRouteProps = Record<string, never>; // Update this type if needed
 
 export default function ProtectedRoute<T extends ProtectedRouteProps>(
   Component: ComponentType<T>
@@ -46,7 +47,7 @@ export default function ProtectedRoute<T extends ProtectedRouteProps>(
     }, [router]);
 
     if (!isAuthorized) {
-      return <div>Loading...</div>; // Optional loading indicator.
+      return <div>Loading...</div>; // Optional loading indicator
     }
 
     return <Component {...props} />;
