@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 import { MapPin, Upload, X, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import { useRouter } from 'next/navigation'
+import ProtectedComponent from '@/components/UnifiedProtectedComponent'
 const Map = dynamic(() => import('../../components/MapComponent'), { ssr: false })
 
 const containerVariants = {
@@ -326,4 +327,4 @@ function ReportPage() {
   )
 }
 
-export default ReportPage
+export default ProtectedComponent(ReportPage);
