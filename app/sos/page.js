@@ -68,7 +68,7 @@ export default function SOSPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br from-teal-200 to-blue-500 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div className="min-h-[calc(100vh-7vh)] bg-gradient-to-br mt-14 from-teal-200 to-blue-500 py-8 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <motion.div 
         className="max-w-7xl mx-auto bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden"
         initial={{ opacity: 0, y: 50 }}
