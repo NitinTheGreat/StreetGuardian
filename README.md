@@ -19,19 +19,18 @@ Our mission is to ensure no one is left without a safe place to stay, bridging t
 
 ## 📸 Screenshots
 
-*Replace the placeholder links with actual screenshots of your application.*
 
 | Landing Page                                     | Reporting Form                                 | Login Page                                     |
 | ------------------------------------------------ | ---------------------------------------------- | ---------------------------------------------- |
-| ![Landing Page](https://ibb.co/CKnrtmk6) | ![Reporting Form](https://ibb.co/C5LGnTpL) | ![Login Page](https://ibb.co/B5H7k9wZ) |
+| ![Landing Page](public/sg1.png) | ![Reporting Form](public/sg3.png) | ![Login Page](public/sg2.png) |
 
 | Admin Dashboard                                  | Rewards Page                                     |
 | ------------------------------------------------ | ------------------------------------------------ |
-| ![Admin Dashboard](https://ibb.co/2B2myVt) | ![Rewards Page](https://ibb.co/PGNXHpPq) |
+| ![Admin Dashboard](public/sg4.png) | ![Rewards Page](public/sg5.png) |
 
 | SOS Alert Page                                   |
 | ------------------------------------------------ |
-| ![SOS Alert Page](https://ibb.co/cfmccCW) |
+| ![SOS Alert Page](public/sg6.png) |
 
 ---
 
@@ -127,4 +126,4 @@ Contributions make the open-source community an amazing place to learn, inspire,
 This project was brought to life by:
 
 -   **Nitin Kumar Pandey** - [LinkedIn](https://linkedin.com/in/nitinkrpandey)
--   **Mahin Dhoke** - [LinkedIn](https://linkedin.com/in/mahindhoke)
+-   **Mahin Dhoke** - [LinkedIn](https://linkedin.com/in/mahin-dhoke)
